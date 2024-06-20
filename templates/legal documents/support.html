@@ -1,0 +1,44 @@
+{% extends 'base-blank.html' %}
+
+{% block title %}Support{% endblock title %}
+
+{% block stylesheet %}
+<style>
+    .cpvc {
+        color: #767676;
+    }
+
+    .cpva {
+        color: #00ffe761;
+    }
+</style>
+{% endblock stylesheet %}
+
+
+{% block body %}
+
+<main class="container-fluid usn overflow-hidden">
+    <h1 class="my-5 text-center border-bottom pb-5">
+        <span style="color: orangered; font-weight: 500;">
+            <span style="color: orange;">i</span>Shop
+        </span> Support
+    </h1>
+    <div class="container pb-5">
+        <p class="text-center display-5 text-success mb-5 pb-5">
+            Please Contact Us For any Query.
+        </p>
+        <div class="d-flex justify-content-between mt-5">
+            <div>
+                <h4>Contact us:</h4>
+                <p><a href="/contact">Send us your query</a></p>
+            </div>
+            <div class="display-5 text-center">OR</div>
+            <div>
+                <h4>Mail us:</h4>
+                <p>ishopicecreams@gmail.com</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock body %}

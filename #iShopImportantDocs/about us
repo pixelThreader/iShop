@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>About Us - iShop</title>
+</head>
+<body>
+	<h1>About Us</h1>
+	<p>Welcome to iShop, your one-stop-shop for the best ice cream in town!</p>
+	<p>At iShop, we take pride in providing our customers with high-quality, delicious ice cream that is made with the finest ingredients. Our passion for ice cream is what drives us to create unique flavors that will satisfy your sweet tooth.</p>
+	<p>Our ice cream shop was founded in 1987, and since then we have grown to become a global company with over 10,000 shops worldwide. We believe that ice cream brings people together and creates happy memories, which is why we are dedicated to providing you with the best possible experience.</p>
+	<p>Whether you're in the mood for a classic flavor or something more adventurous, we've got you covered. From rich and creamy chocolate to refreshing and fruity sorbets, our ice cream is sure to please every palate.</p>
+	<p>Our commitment to quality extends beyond just our ice cream. We strive to provide exceptional service to all of our customers, no matter where they are in the world. We have a dedicated team of professionals who work tirelessly to ensure that your experience with iShop is the best it can be.</p>
+	<img src="https://example.com/icecream-shop.jpg" alt="iShop Ice Cream Shop">
+	<p>One of the things that sets us apart from other ice cream shops is our dedication to innovation. We are constantly exploring new flavor combinations and techniques to create ice cream that is not only delicious but also unique. We believe that this commitment to innovation is what has helped us become one of the leading ice cream companies in the world.</p>
+	<img src="https://example.com/icecream-innovation.jpg" alt="iShop Ice Cream Innovation">
+	<p>At iShop, we are also committed to giving back to our communities. We partner with local organizations to support important causes and make a positive impact in the world. We believe that by working together, we can make a difference.</p>
+	<img src="https://example.com/icecream-charity.jpg" alt="iShop Ice Cream Charity">
+	<p>Thank you for choosing iShop for your ice cream needs. We look forward to serving you and creating happy memories that will last a lifetime!</p>
+</body>
+</html>

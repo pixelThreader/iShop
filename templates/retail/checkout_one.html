@@ -1,0 +1,464 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout{% endblock title %}
+{% block miniNav %}d-none{% endblock miniNav %}
+
+{% block stylesheet %}
+
+<style>
+    .container {
+        max-width: 960px;
+    }
+
+    .card.unused {
+        min-height: 100px;
+        width: 332px;
+        border-color: #00ff80;
+    }
+
+    .usn {
+        user-select: none;
+    }
+
+    .transition-5 {
+        transition: .5s !important;
+    }
+
+    #cupon-list {
+        height: 0px;
+        padding: 0;
+        transition: ease-in-out .5s;
+        overflow: hidden;
+    }
+
+    #cupon-list.redeem {
+        height: 265.5px;
+        padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+    }
+
+    #cupon-list.redeemFail {
+        height: 40px;
+        padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+    }
+</style>
+
+{% endblock stylesheet %}
+
+{% block body %}
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="check2" viewBox="0 0 16 16">
+        <path
+            d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+    </symbol>
+    <symbol id="circle-half" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
+    </symbol>
+    <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path
+            d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
+        <path
+            d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z" />
+    </symbol>
+    <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path
+            d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+    </symbol>
+</svg>
+
+
+<div class="container usn">
+    <main>
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/static/brand/iShop.png" alt="" width="72" height="72">
+            <h2>Checkout</h2>
+            <p class="lead">Our commitment to quality extends beyond just our ice cream. We strive to provide
+                exceptional service to all of our customers, no matter where they are in the world.</p>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-primary">Your Item</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">{{ productIdentity.product_name }}</h6>
+                        </div>
+                        <span class="text-body-secondary">₹
+                            <span class="money m-0 p-0">
+                                {{ productIdentity.product_price }}
+                            </span>
+                        </span>
+                        <input type="hidden" name="quantity" class="qty" value="{{ numberOfProduct }}">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between bg-body-tertiary" id="cupon-list">
+                        <div class="text-success w-100">
+                            <h6 class="my-0" id="cuponsuccessfail">Cupon Applied</h6>
+                            <hr class="my-3 text-secondary">
+                            <small class=" text-secondary">Code:</small>
+                            <span id="CuponApplied" class="text-info">EXAMPLECODE</span>
+                            <hr class="my-3 text-secondary">
+                            <small class=" text-secondary">Discount:</small>
+                            <span id="discountpercent">0%</span>
+                            <hr class="my-3 text-secondary">
+                            <small class=" text-secondary">Validity:</small>
+                            <span id="validity">None</span>
+                            <hr class="my-3 text-secondary">
+                            <small class=" text-secondary">Amount Removed:</small>
+                            <span id="discountprice" class="text-warning">₹00.00</span>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (INR)</span>
+                        <strong id="subtotal" class="transition-5">₹00.00</strong>
+                        <strong id="subtotalDiscount" class="transition-5 d-none">₹00.00</strong>
+                    </li>
+                </ul>
+
+                <form class="card p-2" id="redeem-Form" method="post" action="/retail/checkout/">
+                    <div class="input-group">
+                        <input type="hidden" name="CuponId" id="CuponId">
+                        <input type="hidden" name="MaxPrice" id="MaxPrice">
+                        <input type="hidden" name="forwhat" id="forwhat" value="CuponCode">
+                        <input type="text" class="form-control bg-dark" placeholder="Promo code" name="redeemcode"
+                            id="redeemcode">
+                        <button type="submit" class="btn btn-secondary">Redeem</button>
+                    </div>
+                </form>
+
+                <p class="text-end">
+                    <a type="button" data-bs-toggle="offcanvas" data-bs-target="#cuponViewer"
+                        aria-controls="cuponViewer" class="link-success" style="font-size: 12px;">View my Cupons</a>
+                </p>
+            </div>
+            <div class="col-md-7 col-lg-8 position-relative">
+                <h4 class="mb-3">Billing address</h4>
+                <button class="btn btn-sm btn-outline-secondary position-absolute" id="fillUp"
+                    title="Fills Automaticlly As Per Your Account" data-bs-toggle="modal"
+                    data-bs-target="#AutoFillModal" style="right: 29px; top: 4px;">Auto Fill</button>
+                <form action="/retail/checkoutThis/" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">First name</label>
+                            <input type="text" class="form-control bg-dark" id="firstName" name="firstName"
+                                placeholder="Your First Name" required>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Last name</label>
+                            <input type="text" class="form-control bg-dark" id="lastName" name="lastName"
+                                placeholder="Your Last Name" required>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="phone1" class="form-label">Phone</label>
+                            <input type="tel" class="form-control bg-dark" id="phone1" name="phone1"
+                                placeholder="Your Phone Number" required>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="phone2" class="form-label">Phone(alt)</label>
+                            <input type="tel" class="form-control bg-dark" id="phone2" name="phone2"
+                                placeholder="Alt. Phone(Optional)">
+                        </div>
+
+                        <div class="col-12">
+                            <label for="email" class="form-label">Email <span
+                                    class="text-body-secondary">(Optional)</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">@</span>
+                                <input type="email" class="form-control bg-dark" id="email" name="email"
+                                    placeholder="you@example.com">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="address" class="form-label">Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <ion-icon name="home"></ion-icon>
+                                </span>
+                                <input type="text" class="form-control bg-dark" id="address" name="address" placeholder="1234 Main St"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="address2" class="form-label">Address 2 <span
+                                    class="text-body-secondary">(Optional)</span></label>
+                            <input type="text" class="form-control bg-dark" id="address2" name="address2"
+                                placeholder="Apartment or suite">
+                        </div>
+
+                        <div class="col-md-5">
+                            <label for="country" class="form-label">Country</label>
+                            <input type="text" class="form-control bg-dark" id="country" name="country" placeholder="Your Country">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="state" class="form-label">State</label>
+                            <input type="text" class="form-control bg-dark" id="state" name="state" placeholder="Your State">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="pin" class="form-label">PinCode</label>
+                            <input type="text" class="form-control bg-dark" id="pin" name="pin" placeholder="Pin Code" required>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="same-address" required>
+                        <label class="form-check-label" for="same-address">I'm not a Robot</label>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- some important hidden items -->
+                    <input type="hidden" name="forwhat" id="forWhat" value="ToPayment">
+                    <input type="hidden" name="buynow_product_Id" id="forWhat" value="{{ productIdentity.products_id}}">
+                    <input type="hidden" name="buynow_product_Quantity" id="forWhat" value="{{ numberOfProduct }}">
+                    <input type="hidden" name="buynow_product_Pack" id="forWhat" value="{{ productSize }}">
+                    <input type="hidden" name="cuponUsed" id="cuponUsed">
+                    <input type="hidden" name="TotalPayableAmount" id="TotalPayableAmount">
+
+                    <button class="w-100 btn btn-success btn-lg mb-2" type="submit">Continue to Payment</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+<div class="offcanvas offcanvas-bottom usn" style="height: 345px;" tabindex="-1" id="cuponViewer"
+    aria-labelledby="cuponViewerLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title text-success" id="cuponViewerLabel">Your Available Cupons</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body small scroll-access position-relative">
+
+        <div class="container-fluid d-flex scroll-access-none" style="overflow: auto; overflow-y: hidden;">
+            {% for cupon in NewCupons %}
+            <div class="card unused mx-3 mt-3 overflow-hidden" style="min-width: 365px; height: 200px;">
+                <div class="card-title px-2 text-warning border-bottom" style="background: #5edb0057;">Cupon for
+                    <b>{{ cupon.cupon_discount }}%</b> off
+                </div>
+                <div class="card-body position-relative">
+                    <h6><span class="text-muted">Cupon name</span>: {{ cupon.cupon_name }}</h6>
+                    <p>
+                        <span class="text-muted">Code</span>: <span class="text-info">
+                            {{ cupon.cupon_code }}
+                        </span>
+                    </p>
+                    <div class="discount position-absolute d-flex justify-content-center align-items-center"
+                        style="height: 80px; width: 80px; top: 7px; right: 17px;">
+                        <h1 style="color: #00df26;">
+                            {{ cupon.cupon_discount }}%
+                        </h1>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span class="pen text-muted" style="font-size: 12px">Cupon no: {{ cupon.cupon_sno }}</span>
+                    <input type="hidden" name="hiddencode" id="cupon{{ cupon.cupon_sno }}"
+                        value="{{ cupon.cupon_code }}">
+                    <button class="btn btn-sm btn-primary float-end" identity="{{ cupon.cupon_id }}"
+                        serial="{{ cupon.cupon_sno }}" data-bs-dismiss="offcanvas"
+                        onclick="cuponidentity(this)">Redeem</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a href="/retail/my-cupons" class="position-absolute link-info"
+            style="right: 0; bottom: 0; color: #206aab; margin: 5px;">View my All Cupons</a>
+
+    </div>
+</div>
+
+<!-- Modal AutoFill -->
+<div class="modal fade usn scroll-access overflow-hidden" id="AutoFillModal" tabindex="-1"
+    aria-labelledby="AutoFillModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 pen" id="AutoFillModalLabel">
+                    Our AutoFill <b class="text-info">Policy</b>
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pen">
+                <ul class="my-2 text-gray">
+                    <li>The autofill button on the iShop website can automatically fill in your account credentials for
+                        <strong style="color: #04ad1a"> faster checkout.</strong>
+                    </li>
+                    <hr class="my-3">
+                    <li class="mt-2">If you want to change your credentials, <strong style="color: #04ad1a">you can
+                            easily edit the autofilled information</strong> before submitting your order.</li>
+                    <hr class="my-3">
+                    <li class="mt-2">The <u>address2 field is optional and autofill won't fill it</u> in, but <span
+                            style="color: #99e362;">it can be helpful
+                            for our delivery team if you provide</span> additional information such as an apartment
+                        number or
+                        suite.</li>
+                    <hr class="my-3">
+                    <li class="mt-2">Using the autofill feature can <strong style="color: #04ad1a">save you
+                            time</strong> and ensure that your <span style="color: #04ad1a">order is
+                            processed quickly</span>.</li>
+                    <hr class="my-3">
+                    <li class="mt-2">Please <strong style="color: #99e362">double-check your autofilled
+                            information</strong> before submitting
+                        your order to ensure that all details are correct.</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-success px-3" title="Fill As Per Your Account" data-bs-dismiss="modal"
+                    aria-label="Close" onclick="Autofill()">Fill</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    TotalPayableAmount.value = subtotal.value;
+
+    function cuponidentity(e) {
+        CuponId = document.getElementById('CuponId');
+        cuponUsed = document.getElementById('cuponUsed');
+        redeemcode = document.getElementById('redeemcode');
+        getOriginalID = e.getAttributeNode('identity');
+        getsno = e.getAttributeNode('serial').value;
+        getOriginalCode = document.getElementById(`cupon${getsno}`);
+        CuponId.value = getOriginalID.value;
+        redeemcode.value = getOriginalCode.value;
+        cuponUsed.value = getOriginalCode.value;
+    }
+
+    const form = document.getElementById('redeem-Form');
+    // Get the target element by ID
+    const validity = document.getElementById('validity');
+    const cuponApplied = document.getElementById('CuponApplied');
+    const discountpercent = document.getElementById('discountpercent');
+    const discountprice = document.getElementById('discountprice');
+    const subtotalDiscount = document.getElementById('subtotalDiscount');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: form.method,
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+            .then(response => response.json()) // Parse the response as JSON
+            .then(data => {
+                // Update the target element with the value of the "getTheCupon" variable
+                if (data.validity == 'Cupon Valid') {
+                    document.getElementById('cupon-list').classList.remove('redeemFail')
+                    document.getElementById('cupon-list').classList.add('redeem')
+                    document.getElementById('cuponsuccessfail').innerText = "Cupon Applied";
+                    cuponApplied.innerText = data.cupon_code;
+                    discountpercent.innerText = data.cupon_discount + '% off';
+                    subtotalDiscount.innerText = '₹ ' + data.youPay;
+                    TotalPayableAmount.value = data.youPay;
+                    discountprice.innerText = '₹ ' + data.cupon_applied;
+                    validity.innerText = data.validity;
+                    subtotal.classList.add('text-danger');
+                    subtotal.style.textDecoration = 'line-through';
+                    subtotal.style.position = "absolute";
+                    subtotal.style.fontSize = "12px";
+                    subtotal.style.bottom = "0";
+                    subtotal.style.right = "4px";
+                    subtotalDiscount.style.transform = 'translateX(-56px)';
+                    subtotalDiscount.style.fontSize = "18px";
+                    subtotalDiscount.style.color = "#1dff24d6";
+                    subtotalDiscount.classList.remove('d-none');
+                    document.getElementById('cuponsuccessfail').style.color = "chartreuse";
+                    document.getElementById('cupon-list').style.borderColor = "#00ff00";
+                    document.getElementById('cupon-list').style.borderTop = "1px solid #00ff00";
+                }
+                else {
+                    document.getElementById('cuponsuccessfail').innerText = data.validity;
+                    document.getElementById('cuponsuccessfail').style.color = "crimson";
+                    document.getElementById('cupon-list').classList.add('redeemFail')
+                    document.getElementById('cupon-list').style.borderColor = "#d32f2f";
+                    document.getElementById('cupon-list').style.borderTop = "1px solid #d32f2f";
+                    subtotalDiscount.innerText = "";
+                    discountprice.innerText = '₹ ' + data.cupon_applied;
+                    subtotal.classList.remove('text-danger');
+                    TotalPayableAmount.value = subtotal.value;
+                    subtotal.style.textDecoration = 'none';
+                    subtotal.style.position = "absolute";
+                    subtotal.style.fontSize = "";
+                    subtotal.style.bottom = "";
+                    subtotal.style.right = "16px";
+                }
+
+            })
+            .catch(error => console.error(error)); // Log any errors to the console
+    });
+
+</script>
+{% block js %}
+<script>
+    function evaluate() {
+        // get all the product prices and quantities
+        const productPrices = document.querySelectorAll('.money');
+        const productQuantities = document.querySelectorAll('.qty');
+
+        // initialize the subtotal to zero
+        let subtotal = 0;
+
+        // loop through each product and calculate its price based on quantity
+        for (let i = 0; i < productPrices.length; i++) {
+            let price = parseFloat(productPrices[i].innerText);
+            let quantity = parseInt(productQuantities[i].value);
+            subtotal += price * quantity;
+            MaxPrice.value = subtotal;
+            TotalPayableAmount.value = subtotal;
+        }
+
+        // display the subtotal
+        document.getElementById('subtotal').textContent = '₹' + subtotal.toFixed(2);
+    }
+    window.onload = function () {
+        evaluate()
+    }
+
+    function Autofill() {
+        // getting all the inputs
+        const firstName = document.getElementById('firstName');
+        const lastName = document.getElementById('lastName');
+        const email = document.getElementById('email');
+        const address = document.getElementById('address');
+        const country = document.getElementById('country');
+        const state = document.getElementById('state');
+        const pin = document.getElementById('pin');
+        const phone1 = document.getElementById('phone1');
+        const phone2 = document.getElementById('phone2');
+
+        firstName.value = "{{ request.user.first_name }}";
+        lastName.value = "{{ request.user.last_name }}";
+        email.value = "{{ request.user.email }}";
+        address.value = "{{ request.user.additionalusercredentials.city }}";
+        country.value = "{{ request.user.additionalusercredentials.country }}";
+        state.value = "{{ request.user.additionalusercredentials.state }}";
+        pin.value = "{{ request.user.additionalusercredentials.pinCode }}";
+        phone1.value = "{{ request.user.additionalusercredentials.phone }}";
+        phone2.value = "{{ request.user.additionalusercredentials.phone_alt }}";
+
+    }
+</script>
+
+{% endblock js %}
+
+{% endblock body %}

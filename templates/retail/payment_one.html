@@ -1,0 +1,832 @@
+{% extends 'base-blank.html' %}
+
+{% block title %}Transactions{% endblock title %}
+
+{% block stylesheet %}
+<style>
+    .h100p {
+        height: 100%;
+    }
+
+    .w100 {
+        width: 100px;
+    }
+
+    .h480 {
+        height: 480px;
+    }
+
+    .rounditppal01 {
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+    }
+
+    .rounditppal02 {
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .apple-font {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .position-relative {
+        position: relative !important;
+    }
+
+    .position-absolute {
+        position: absolute !important;
+    }
+
+    #visa-orange {
+        z-index: 2;
+        height: 6px;
+        width: 6px;
+        background: #f3a23b;
+        transform: skewX(9.2deg) skewY(-4deg) rotateY(21deg) translateY(-36.7px) translateX(5px) rotateZ(5deg);
+        border-top-right-radius: 1px;
+    }
+
+    #AfterOrange {
+        z-index: 3;
+        height: 6px;
+        width: 6px;
+        background: #fff;
+        transform: translateY(0.2px) translateX(-0.1px);
+        border-top-right-radius: 7px;
+        transform: skewX(9.2deg) skewY(0deg) rotateY(21deg) translateY(-36.5px) translateX(4.9px) rotateZ(4deg);
+        overflow: hidden;
+    }
+
+    #beforeOrange {
+        z-index: 1;
+        height: 6px;
+        width: 6px;
+        background: #fff;
+        transform: translateY(0.2px) translateX(-0.1px);
+        transform: skewX(9.2deg) skewY(0deg) rotateY(21deg) translateY(-36.7px) translateX(5px) rotateZ(4deg);
+    }
+
+    #v {
+        display: block;
+        width: 3px;
+        height: 5px;
+        background: #3957a7;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+    }
+</style>
+{% endblock stylesheet %}
+
+{% block body %}
+
+<main class="position-relative overflow-hidden h100p usn">
+    <section class="container position-relative">
+
+        <div class="display-5 mt-4">
+            <span style="color: orangered; font-weight: 300;">
+                <span style="color: orange;">i</span>Shop
+            </span> Payments
+        </div>
+    </section>
+
+    <hr class="my-4">
+
+    <section class="container-fluid h480 position-relative border p-0 rounded-1 overflow-hidden">
+        <div class="row m-0 p-0 h100p">
+            <!-- inthis section user will see all the products which he orderd -->
+            <section class="col-7 border-end p-0">
+                <div class="container-fluid text-center border-bottom d-flex align-items-center justify-content-center text-info"
+                    style="height: 40px;">Your Order (You Cant Change
+                    These)</div>
+                <div class="container-fluid text-center scroll-access pb-3" id="youareordering"
+                    style="height: 438px; overflow-x: hidden; overflow-y: auto;">
+                    <div class="container-fluid position-absolute p-0" id="someShadow1"
+                        style="height: 50px; left: 0; background: linear-gradient(0deg, transparent, transparent, #212529);">
+                    </div>
+                    <div class="container-fluid position-absolute p-0" id="someShadow2"
+                        style="height: 50px; left: 0; bottom: 0; background: linear-gradient(0deg, #212529, transparent, transparent);">
+                    </div>
+
+                    <!-- main contents of user's things -->
+                    <div class="container-fluid p-0 h100 pt-4">
+
+                        <!-- list of his choosed icecreams -->
+
+                        <h6 class="my-6" style="color: #00ff95;">ICECREAM DETAILS</h6>
+
+                        <table class="table table-sm table-bordered" style="border-color: #00ff0a54;">
+                            <thead>
+                                <tr>
+                                    <th style="width:60%" class="text-start ps-3">Product</th>
+                                    <th style="width:14%">Price/Box</th>
+                                    <th style="width:10%">Quantity</th>
+                                    <th style="width:16%">Size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        {{ customer.user_order_product.product_name }}
+                                    </th>
+                                    <td>
+                                        ₹ {{ customer.user_order_product.product_price }}
+                                    </td>
+                                    <td>{{ customer.user_order_product_qty }}</td>
+                                    <td>{{ customer.user_order_product_size }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <hr class="my-5" style="color: #00ffe769; opacity: 1;">
+
+                        <!-- subtotal -->
+
+                        <h6 class="my-6" style="color: #00ff95;">SUBTOTAL</h6>
+
+                        <table class="table table-sm table-bordered" style="border-color: #00ffe769 !important;">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%; color: #605f5f;" class="text-start ps-3">Cupon Applied</th>
+                                    <th style="width:18%; color: #605f5f;">Additional Tax</th>
+                                    <th style="width:14%; color: #605f5f;">Shipping</th>
+                                    <th style="width:20%; color: #605f5f;">Icecream Cost</th>
+                                    <th style="width:25%; color: #00ff00;">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        {% if customer.user_order_cupon_applied %}
+                                        <span class="text-success">Applied</span>
+                                        ({{ customer.user_order_cupon.cupon_discount }}%)
+                                        {% else %}
+                                        No Cupons
+                                        {% endif %}
+                                    </th>
+                                    <td>₹50.00</td>
+                                    <td>₹10.00</td>
+                                    <td>₹ {{ amountPay }}</td>
+                                    <td style="color: #00ff00;" id="PayUsAmount"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <hr class="my-5" style="color: #efff0069; opacity: 1;">
+
+                        <!-- Shipping Details -->
+                        <h6 class="my-6" style="color: #00ff95;">SHIPPING DETAILS</h6>
+                        <p class="text-secondary" style="font-weight: 200;">(your product bill has these credentials)
+                        </p>
+
+                        <table class="table table-sm table-bordered" style="border-color: #efff0069 !important;">
+                            <thead>
+                                <tr>
+                                    <th style="width:25%; color: #605f5f;">Feilds</th>
+                                    <th style="width:75%; color: #605f5f;">Response Registered</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th style="border-bottom: 1px solid #495057;" scope="col">Name</th>
+                                    <td style="border-bottom: 1px solid #495057;">
+                                        {{ customer.user_order_nameFirst }}
+                                        {{ customer.user_order_nameLast }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="border-bottom: 1px solid #495057;" scope="col">Email</th>
+                                    <td style="border-bottom: 1px solid #495057;">
+                                        {{ customer.user_order_email }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="border-bottom: 1px solid #495057;" scope="col">Phone</th>
+                                    <td style="border-bottom: 1px solid #495057;">
+                                        +91 {{ customer.user_order_phone1 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="border-bottom: 1px solid #495057;" scope="col">Phone2</th>
+                                    <td style="border-bottom: 1px solid #495057;">
+                                        {% if customer.user_order_phone2_opt %}
+                                        +91 {{ customer.user_order_phone2_opt }}
+                                        {% else %}
+                                        Not Provided---Ok
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="border-bottom: 1px solid #495057;" scope="col">Address</th>
+                                    <td style="border-bottom: 1px solid #495057;">
+                                        {{ customer.user_order_address1 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="border-bottom: 1px solid #495057;" scope="col">Address2</th>
+                                    <td style="border-bottom: 1px solid #495057;">
+                                        {% if customer.user_order_address2_opt %}
+                                        {{ customer.user_order_address2_opt }}
+                                        {% else %}
+                                        Not Provided---Ok
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="border-bottom: 1px solid #495057;" scope="col">Country</th>
+                                    <td style="border-bottom: 1px solid #495057;">
+                                        {{ customer.user_order_country }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="border-bottom: 1px solid #495057;" scope="col">State</th>
+                                    <td style="border-bottom: 1px solid #495057;">
+                                        {{ customer.user_order_state }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">Pin Code</th>
+                                    <td>
+                                        {{ customer.user_order_pin }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+
+                </div>
+            </section>
+            <!-- Here user will see payment section here he or she will make a payment to us -->
+            <section class="col-5 p-0">
+                <!-- nav of payments -->
+                <nav>
+                    <div class="nav nav-tabs d-flex justify-content-center" style="height: 40px;" id="nav-tab"
+                        role="tablist">
+                        <button class="nav-link active p-0 px-2" id="nav-via-visa-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-visa" type="button" role="tab" aria-controls="nav-visa"
+                            aria-selected="true" tabindex="-1" title="Pay Via Visa">
+                            <img src="/static/payment/visa.png" alt="" height="30px" width="50px">
+                        </button>
+                        <button class="nav-link p-0 px-2" id="nav-via-debit-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-debit" type="button" role="tab" aria-controls="nav-debit"
+                            aria-selected="false" tabindex="-1" title="Pay Via Debit Card">
+                            <img src="/static/payment/discover.png" alt="" height="30px" width="50px">
+                        </button>
+                        <button class="nav-link p-0 px-2" id="nav-via-cash-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-cash" type="button" role="tab" aria-controls="nav-cash"
+                            aria-selected="false" tabindex="-1" title="Pay Cash on Delivery">
+                            <style>
+                                #cash-pay {
+                                    height: 30px;
+                                    width: 50px;
+                                    background: url(/static/payment/delivery_payment_cash_service.png) #fff;
+                                    background-size: contain;
+                                    background-repeat: no-repeat;
+                                    background-position: center;
+                                    border-radius: 2px;
+                                }
+                            </style>
+                            <div class="overflow-hidden" id="cash-pay"></div>
+                        </button>
+                        <button class="nav-link p-0 px-2" id="nav-via-master-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-master" type="button" role="tab" aria-controls="nav-master"
+                            aria-selected="false" tabindex="-1" title="Pay Via Master Card">
+                            <img src="/static/payment/mastercard.png" alt="" height="30px" width="50px">
+                        </button>
+                        <button class="nav-link p-0 px-2" id="nav-via-ppal-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-ppal" type="button" role="tab" aria-controls="nav-ppal"
+                            aria-selected="false" tabindex="-1" title="Pay Via PayPal">
+                            <img src="/static/payment/paypal.png" alt="" height="30px" width="50px">
+                        </button>
+                        <button class="nav-link p-0 px-2" id="nav-via-credit-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-credit" type="button" role="tab" aria-controls="nav-credit"
+                            aria-selected="false" tabindex="-1" title="Pay Via Credit Card">
+                            <img src="/static/payment/credit-card.png" alt="" height="30px" width="50px">
+                        </button>
+                    </div>
+                </nav>
+                <!-- forms of payment -->
+                <div class="tab-content container-fluid p-0" id="nav-tabContent" style="height: 438px;">
+                    <!-- visa -->
+                    <div class="tab-pane fade h100p active show position-relative" id="nav-visa" role="tabpanel"
+                        aria-labelledby="nav-via-visa-tab" style="background: #0b0f851c;">
+
+                        <div class="position-relative" style="height: 80.8px;">
+                            <h4 class="text-end me-3 pt-1 mb-5" style="transform: translateY(15px);">
+                                <em>
+                                    <span class="bg-light rounditppal01 px-2 pb-1"
+                                        style="color: #3957a7;">VISA</span><span
+                                        class="bg-light rounditppal02 pe-2 pb-1" style="color: #336699;">PAY</span>
+                                </em>
+                                <div class="position-absolute"
+                                    style="transform: translateX(436px) translateY(16px) rotateZ(-3deg) skewY(3deg) skewX(-2deg);">
+                                    <span id="visa-orange" class="position-absolute"></span>
+                                    <span id="beforeOrange" class="position-absolute"></span>
+                                    <span id="AfterOrange" class="position-absolute">
+                                        <span id="v"></span>
+                                    </span>
+                                </div>
+                            </h4>
+                        </div>
+
+                        <form action="/retail/your_invoice/" enctype="multipart/form-data" method="post">
+                            <div class="px-3">
+                                <label for="visa-name" class="form-label">Name on card</label>
+                                <input type="text" class="form-control bg-dark" id="visa-name"
+                                    placeholder="Full name as displayed on card">
+                            </div>
+                            <div class="px-3 my-3">
+                                <label for="visa-number" class="form-label">Visa number</label>
+                                <input type="text" class="form-control bg-dark" id="visa-number"
+                                    placeholder="xxxx-xxxx-xxxx-xxxx">
+                            </div>
+                            <div class="row p-0 m-0">
+                                <div class="col-md-6">
+                                    <label for="visa-expiration" class="form-label">Expiration</label>
+                                    <input type="date" class="form-control bg-dark" id="visa-expiration">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="visa-cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control bg-dark" id="visa-cvv"
+                                        placeholder="Security code">
+                                </div>
+                            </div>
+
+
+                            <div class="position-absolute container-fluid bottom-0 border-top d-flex justify-content-end align-items-center"
+                                style="height: 50px; background: rgba(0, 0, 0, 0.425);">
+                                {% csrf_token %}
+                                <!-- Inputs -->
+                                <input type="hidden" name="paymentMethod" value="Visa">
+
+                                <input type="hidden" name="Address1" value="{{ customer.user_order_address1 }}">
+
+                                <input type="hidden" name="Address2" value="{{ customer.user_order_address2_opt }}">
+
+                                <input type="hidden" name="BarCode" value="{{ customer.user_order_Code }}">
+
+                                <input type="hidden" name="customerFirstName"
+                                    value="{{ customer.user_order_nameFirst }}">
+
+                                <input type="hidden" name="customerLastName" value="{{ customer.user_order_nameLast }}">
+
+                                <input type="hidden" name="customerPhone1" value="{{ customer.user_order_phone1 }}">
+
+                                <input type="hidden" name="customerPhone2" value="{{ customer.user_order_phone2_opt }}">
+
+                                <input type="hidden" name="iceCreamQuantity"
+                                    value="{{ customer.user_order_product_qty }}">
+
+                                <input type="hidden" name="serviceTax" value="50">
+
+                                <input type="hidden" name="Shipping" value="10">
+
+                                <input type="hidden" name="Locationcountry" value="{{ customer.user_order_country }}">
+
+                                <input type="hidden" name="Locationstate" value="{{ customer.user_order_state }}">
+
+                                <input type="hidden" name="Locationpin" value="{{ customer.user_order_pin }}">
+
+                                <input type="hidden" name="Locationcity"
+                                    value="{{ customer.customer.additionalusercredentials.city }}">
+
+                                <input type="hidden" name="Product"
+                                    value="{{ customer.user_order_product.product_name }}">
+
+                                <input type="hidden" name="Product_net_Price" id="Product_net_Price">
+                                <!-- Submit -->
+                                <button type="submit" class="btn btn-sm btn-success" style="width: 100px;">Pay</button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <!-- debit card -->
+                    <div class="tab-pane fade h100p position-relative" id="nav-debit" role="tabpanel"
+                        aria-labelledby="nav-via-debit-tab" style="background: #4f4c199e;">
+
+                        <h4 class="text-end me-3 pt-1 mb-5" style="transform: translateY(15px);"><em><span
+                                    class="bg-light rounditppal01 px-2 pb-1" style="color: #f26822;">DEBIT</span><span
+                                    class="bg-light rounditppal02 pe-2 pb-1" style="color: #35870a;">CARD</span></em>
+                        </h4>
+
+                        <form action="/retail/your_invoice/" enctype="multipart/form-data" method="post">
+                            <div class="px-3">
+                                <label for="debit-name" class="form-label">Name on card</label>
+                                <input type="text" class="form-control bg-dark" id="debit-name"
+                                    placeholder="Full name as displayed on card">
+                            </div>
+                            <div class="px-3 my-3">
+                                <label for="debit-number" class="form-label">Debit Card number</label>
+                                <input type="text" class="form-control bg-dark" id="debit-number"
+                                    placeholder="xxxx-xxxx-xxxx-xxxx">
+                            </div>
+                            <div class="row p-0 m-0">
+                                <div class="col-md-6">
+                                    <label for="debit-expiration" class="form-label">Expiration</label>
+                                    <input type="date" class="form-control bg-dark" id="debit-expiration">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="debit-cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control bg-dark" id="debit-cvv"
+                                        placeholder="Security code">
+                                </div>
+                            </div>
+
+                            <div class="position-absolute container-fluid bottom-0 border-top d-flex justify-content-end align-items-center"
+                                style="height: 50px; background: rgba(0, 0, 0, 0.425);">
+                                {% csrf_token %}
+                                <!-- Inputs -->
+                                <input type="hidden" name="paymentMethod" value="DebitCard">
+
+                                <input type="hidden" name="Address1" value="{{ customer.user_order_address1 }}">
+
+                                <input type="hidden" name="Address2" value="{{ customer.user_order_address2_opt }}">
+
+                                <input type="hidden" name="BarCode" value="{{ customer.user_order_Code }}">
+
+                                <input type="hidden" name="customerFirstName"
+                                    value="{{ customer.user_order_nameFirst }}">
+
+                                <input type="hidden" name="customerLastName" value="{{ customer.user_order_nameLast }}">
+
+                                <input type="hidden" name="customerPhone1" value="{{ customer.user_order_phone1 }}">
+
+                                <input type="hidden" name="customerPhone2" value="{{ customer.user_order_phone2_opt }}">
+
+                                <input type="hidden" name="iceCreamQuantity"
+                                    value="{{ customer.user_order_product_qty }}">
+
+                                <input type="hidden" name="serviceTax" value="50">
+
+                                <input type="hidden" name="Shipping" value="10">
+
+                                <input type="hidden" name="Locationcountry" value="{{ customer.user_order_country }}">
+
+                                <input type="hidden" name="Locationstate" value="{{ customer.user_order_state }}">
+
+                                <input type="hidden" name="Locationpin" value="{{ customer.user_order_pin }}">
+
+                                <input type="hidden" name="Locationcity"
+                                    value="{{ customer.customer.additionalusercredentials.city }}">
+
+                                <input type="hidden" name="Product"
+                                    value="{{ customer.user_order_product.product_name }}">
+
+                                <input type="hidden" name="Product_net_Price" id="Product_net_Price">
+                                <!-- Submit -->
+                                <button type="submit" class="btn btn-sm btn-success" style="width: 100px;">Pay</button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <!-- cash on delivery -->
+                    <div class="tab-pane fade h100p position-relative" id="nav-cash" role="tabpanel"
+                        aria-labelledby="nav-via-cash-tab" style="background: #107a0345;">
+
+                        <h4 class="text-end me-3 pt-1" style="transform: translateY(15px);">
+                            <em>
+                                <span class="bg-light rounditppal01 px-2 pb-1" style="color: #e20620;">
+                                    CASH
+                                </span>
+                                <span class="bg-light rounditppal02 pe-2 pb-1" style="color: #ed8410;">
+                                    ON DELIVERY
+                                </span>
+                            </em>
+                        </h4>
+
+                        <div class="container-fluid d-flex justify-content-center align-items-center h100p px-4"
+                            style="font-family: 'comfortaa'; transform: translateY(-40px);">
+                            <p>
+                                At <span style="color: orangered; font-weight: 300; background: rgba(0, 0, 0, 0.5);">
+                                    <span style="color: orange;">i</span>Shop</span>,
+                                we know the importance of convenience, which is why <u><b>we offer Cash on Delivery for
+                                        your ice cream orders</b></u>. However, please be aware that <span
+                                    class="text-info">once you confirm your order, it
+                                    cannot
+                                    be cancelled during the delivery process</span>. We appreciate your understanding
+                                and hope you
+                                savor every bite of our delicious treats.
+                            </p>
+                        </div>
+
+                        <div class="position-absolute container-fluid bottom-0 border-top d-flex justify-content-end align-items-center"
+                            style="height: 50px; background: rgba(0, 0, 0, 0.425);">
+                            <form action="/retail/your_invoice/" enctype="multipart/form-data" method="post">
+                                {% csrf_token %}
+                                <!-- Inputs -->
+                                <input type="hidden" name="paymentMethod" value="COD">
+
+                                <input type="hidden" name="Address1" value="{{ customer.user_order_address1 }}">
+
+                                <input type="hidden" name="Address2" value="{{ customer.user_order_address2_opt }}">
+
+                                <input type="hidden" name="BarCode" value="{{ customer.user_order_Code }}">
+
+                                <input type="hidden" name="customerFirstName"
+                                    value="{{ customer.user_order_nameFirst }}">
+
+                                <input type="hidden" name="customerLastName" value="{{ customer.user_order_nameLast }}">
+
+                                <input type="hidden" name="customerPhone1" value="{{ customer.user_order_phone1 }}">
+
+                                <input type="hidden" name="customerPhone2" value="{{ customer.user_order_phone2_opt }}">
+
+                                <input type="hidden" name="iceCreamQuantity"
+                                    value="{{ customer.user_order_product_qty }}">
+
+                                <input type="hidden" name="serviceTax" value="50">
+
+                                <input type="hidden" name="Shipping" value="10">
+
+                                <input type="hidden" name="Locationcountry" value="{{ customer.user_order_country }}">
+
+                                <input type="hidden" name="Locationstate" value="{{ customer.user_order_state }}">
+
+                                <input type="hidden" name="Locationpin" value="{{ customer.user_order_pin }}">
+
+                                <input type="hidden" name="Locationcity"
+                                    value="{{ customer.customer.additionalusercredentials.city }}">
+
+                                <input type="hidden" name="Product"
+                                    value="{{ customer.user_order_product.product_name }}">
+
+                                <input type="hidden" name="Product_net_Price" id="Product_net_Price">
+                                <!-- Submit -->
+                                <button type="submit" class="btn btn-sm btn-success"
+                                    style="width: 100px;">Proceed</button>
+                            </form>
+                        </div>
+
+                    </div>
+                    <!-- master card -->
+                    <div class="tab-pane fade h100p position-relative" id="nav-master" role="tabpanel"
+                        aria-labelledby="nav-via-master-tab"
+                        style="background: linear-gradient(132deg, #9f00009e, #b4ff0073);">
+
+                        <h4 class="text-end me-3 pt-1 mb-5" style="transform: translateY(15px);"><em><span
+                                    class="bg-light rounditppal01 px-2 pb-1" style="color: #e20620;">MASTER</span><span
+                                    class="bg-light rounditppal02 pe-2 pb-1" style="color: #ed8410;">CARD</span></em>
+                        </h4>
+
+                        <form action="/retail/your_invoice/" enctype="multipart/form-data" method="post">
+                            <div class="px-3">
+                                <label for="master-name" class="form-label">Name on card</label>
+                                <input type="text" class="form-control bg-dark" id="master-name"
+                                    placeholder="Full name as displayed on card">
+                            </div>
+                            <div class="px-3 my-3">
+                                <label for="master-number" class="form-label">Master Card number</label>
+                                <input type="text" class="form-control bg-dark" id="master-number"
+                                    placeholder="xxxx-xxxx-xxxx-xxxx">
+                            </div>
+                            <div class="row p-0 m-0">
+                                <div class="col-md-6">
+                                    <label for="master-expiration" class="form-label">Expiration</label>
+                                    <input type="date" class="form-control bg-dark" id="master-expiration">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="master-cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control bg-dark" id="master-cvv"
+                                        placeholder="Security code">
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="position-absolute container-fluid bottom-0 border-top d-flex justify-content-end align-items-center"
+                            style="height: 50px; background: rgba(0, 0, 0, 0.425);">
+                            <form action="/retail/your_invoice/" enctype="multipart/form-data" method="post">
+                                {% csrf_token %}
+                                <!-- Inputs -->
+                                <input type="hidden" name="paymentMethod" value="MasterCard">
+
+                                <input type="hidden" name="Address1" value="{{ customer.user_order_address1 }}">
+
+                                <input type="hidden" name="Address2" value="{{ customer.user_order_address2_opt }}">
+
+                                <input type="hidden" name="BarCode" value="{{ customer.user_order_Code }}">
+
+                                <input type="hidden" name="customerFirstName"
+                                    value="{{ customer.user_order_nameFirst }}">
+
+                                <input type="hidden" name="customerLastName" value="{{ customer.user_order_nameLast }}">
+
+                                <input type="hidden" name="customerPhone1" value="{{ customer.user_order_phone1 }}">
+
+                                <input type="hidden" name="customerPhone2" value="{{ customer.user_order_phone2_opt }}">
+
+                                <input type="hidden" name="iceCreamQuantity"
+                                    value="{{ customer.user_order_product_qty }}">
+
+                                <input type="hidden" name="serviceTax" value="50">
+
+                                <input type="hidden" name="Shipping" value="10">
+
+                                <input type="hidden" name="Locationcountry" value="{{ customer.user_order_country }}">
+
+                                <input type="hidden" name="Locationstate" value="{{ customer.user_order_state }}">
+
+                                <input type="hidden" name="Locationpin" value="{{ customer.user_order_pin }}">
+
+                                <input type="hidden" name="Locationcity"
+                                    value="{{ customer.customer.additionalusercredentials.city }}">
+
+                                <input type="hidden" name="Product"
+                                    value="{{ customer.user_order_product.product_name }}">
+
+                                <input type="hidden" name="Product_net_Price" id="Product_net_Price">
+                                <!-- Submit -->
+                                <button type="submit" class="btn btn-sm btn-success" style="width: 100px;">Pay</button>
+                            </form>
+                        </div>
+
+                    </div>
+                    <!-- paypal -->
+                    <div class="tab-pane fade h100p position-relative" id="nav-ppal" role="tabpanel"
+                        aria-labelledby="nav-via-ppal-tab"
+                        style="background: linear-gradient(335deg, #1d194f9e, #1299739e);">
+
+                        <h4 class="text-end me-3 pt-1 mb-5" style="transform: translateY(15px);"><em><span
+                                    class="bg-light rounditppal01 ps-2 pb-1" style="color: #1c3663;">Pay</span><span
+                                    class="bg-light rounditppal02 pe-2 pb-1" style="color: #336699;">Pal</span></em>
+                        </h4>
+
+                        <form action="/retail/your_invoice/" enctype="multipart/form-data" method="post">
+                            <div class="px-3">
+                                <label for="cc-name" class="form-label">Name on card</label>
+                                <input type="text" class="form-control bg-dark" id="cc-name"
+                                    placeholder="Full name as displayed on card">
+                            </div>
+                            <div class="px-3 my-3">
+                                <label for="cc-number" class="form-label">credit number</label>
+                                <input type="text" class="form-control bg-dark" id="cc-number"
+                                    placeholder="xxxx-xxxx-xxxx-xxxx">
+                            </div>
+                            <div class="row p-0 m-0">
+                                <div class="col-md-6">
+                                    <label for="cc-expiration" class="form-label">Expiration</label>
+                                    <input type="date" class="form-control bg-dark" id="cc-expiration">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cc-cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control bg-dark" id="cc-cvv"
+                                        placeholder="Security code">
+                                </div>
+                            </div>
+
+                            <div class="position-absolute container-fluid bottom-0 border-top d-flex justify-content-end align-items-center"
+                                style="height: 50px; background: rgba(0, 0, 0, 0.425);">
+                                {% csrf_token %}
+                                <!-- Inputs -->
+                                <input type="hidden" name="paymentMethod" value="PayPal">
+
+                                <input type="hidden" name="Address1" value="{{ customer.user_order_address1 }}">
+
+                                <input type="hidden" name="Address2" value="{{ customer.user_order_address2_opt }}">
+
+                                <input type="hidden" name="BarCode" value="{{ customer.user_order_Code }}">
+
+                                <input type="hidden" name="customerFirstName"
+                                    value="{{ customer.user_order_nameFirst }}">
+
+                                <input type="hidden" name="customerLastName" value="{{ customer.user_order_nameLast }}">
+
+                                <input type="hidden" name="customerPhone1" value="{{ customer.user_order_phone1 }}">
+
+                                <input type="hidden" name="customerPhone2" value="{{ customer.user_order_phone2_opt }}">
+
+                                <input type="hidden" name="iceCreamQuantity"
+                                    value="{{ customer.user_order_product_qty }}">
+
+                                <input type="hidden" name="serviceTax" value="50">
+
+                                <input type="hidden" name="Shipping" value="10">
+
+                                <input type="hidden" name="Locationcountry" value="{{ customer.user_order_country }}">
+
+                                <input type="hidden" name="Locationstate" value="{{ customer.user_order_state }}">
+
+                                <input type="hidden" name="Locationpin" value="{{ customer.user_order_pin }}">
+
+                                <input type="hidden" name="Locationcity"
+                                    value="{{ customer.customer.additionalusercredentials.city }}">
+
+                                <input type="hidden" name="Product"
+                                    value="{{ customer.user_order_product.product_name }}">
+
+                                <input type="hidden" name="Product_net_Price" id="Product_net_Price">
+                                <!-- Submit -->
+                                <button type="submit" class="btn btn-sm btn-success" style="width: 100px;">Pay</button>
+                            </div>
+
+                    </div>
+                    <!-- credit card -->
+                    <div class="tab-pane fade h100p position-relative" id="nav-credit" role="tabpanel"
+                        aria-labelledby="nav-via-credit-tab" style="background: #4f19429e;">
+
+                        <h4 class="text-end me-3 pt-1 mb-5" style="transform: translateY(15px);"><em><span
+                                    class="bg-light rounditppal01 px-2 pb-1" style="color: #ec7bb0;">CREDIT</span><span
+                                    class="bg-light rounditppal02 pe-2 pb-1" style="color: #fee444;">CARD</span></em>
+                        </h4>
+
+                        <form action="/retail/your_invoice/" method="post" enctype="multipart/form-data">
+                            <div class="px-3">
+                                <label for="cc-name" class="form-label">Name on card</label>
+                                <input type="text" class="form-control bg-dark" id="cc-name"
+                                    placeholder="Full name as displayed on card">
+                            </div>
+                            <div class="px-3 my-3">
+                                <label for="cc-number" class="form-label">credit number</label>
+                                <input type="text" class="form-control bg-dark" id="cc-number"
+                                    placeholder="xxxx-xxxx-xxxx-xxxx">
+                            </div>
+                            <div class="row p-0 m-0">
+                                <div class="col-md-6">
+                                    <label for="cc-expiration" class="form-label">Expiration</label>
+                                    <input type="date" class="form-control bg-dark" id="cc-expiration">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cc-cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control bg-dark" id="cc-cvv"
+                                        placeholder="Security code">
+                                </div>
+                            </div>
+
+
+                            <div class="position-absolute container-fluid bottom-0 border-top d-flex justify-content-end align-items-center"
+                                style="height: 50px; background: rgba(0, 0, 0, 0.425);">
+                                {% csrf_token %}
+                                <!-- Inputs -->
+                                <input type="hidden" name="paymentMethod" value="CreditCard">
+
+                                <input type="hidden" name="Address1" value="{{ customer.user_order_address1 }}">
+
+                                <input type="hidden" name="Address2" value="{{ customer.user_order_address2_opt }}">
+
+                                <input type="hidden" name="BarCode" value="{{ customer.user_order_Code }}">
+
+                                <input type="hidden" name="customerFirstName"
+                                    value="{{ customer.user_order_nameFirst }}">
+
+                                <input type="hidden" name="customerLastName" value="{{ customer.user_order_nameLast }}">
+
+                                <input type="hidden" name="customerPhone1" value="{{ customer.user_order_phone1 }}">
+
+                                <input type="hidden" name="customerPhone2" value="{{ customer.user_order_phone2_opt }}">
+
+                                <input type="hidden" name="iceCreamQuantity"
+                                    value="{{ customer.user_order_product_qty }}">
+
+                                <input type="hidden" name="serviceTax" value="50">
+
+                                <input type="hidden" name="Shipping" value="10">
+
+                                <input type="hidden" name="Locationcountry" value="{{ customer.user_order_country }}">
+
+                                <input type="hidden" name="Locationstate" value="{{ customer.user_order_state }}">
+
+                                <input type="hidden" name="Locationpin" value="{{ customer.user_order_pin }}">
+
+                                <input type="hidden" name="Locationcity"
+                                    value="{{ customer.customer.additionalusercredentials.city }}">
+
+                                <input type="hidden" name="Product"
+                                    value="{{ customer.user_order_product.product_name }}">
+
+                                <input type="hidden" name="Product_net_Price" id="Product_net_Price">
+                                <!-- Submit -->
+                                <button type="submit" class="btn btn-sm btn-success" style="width: 100px;">Pay</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+</main>
+
+
+
+{% block js %}
+<script>
+    var leng = document.getElementById('youareordering').offsetWidth
+    someShadow1.style.width = `${leng}px`;
+    someShadow2.style.width = `${leng}px`;
+
+    var total = {{ amountPay }};
+
+    document.getElementById("PayUsAmount").innerHTML = `₹ ${total + 50.00 + 10.00}`;
+    document.getElementById("Product_net_Price").value = `${total + 50.00 + 10.00}`;
+</script>
+{% endblock js %}
+
+{% endblock body %}

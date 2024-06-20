@@ -1,0 +1,310 @@
+{% extends 'base-blank.html' %}
+
+{% block title %}
+Sign Up
+{% endblock %}
+
+{% block stylesheet %}
+
+<style>
+    .h100p {
+        height: 100%;
+    }
+
+    .h100 {
+        height: 100px;
+    }
+
+    .h150 {
+        height: 150px;
+    }
+
+    .h200 {
+        height: 200px;
+    }
+
+    .w100p {
+        width: 100%;
+    }
+
+    .pen {
+        cursor: default;
+    }
+</style>
+
+{% endblock stylesheet %}
+
+{% block body %}
+
+<section class="d-flex container-fluid p-0 align-items-center flex-column h100p">
+
+    <h1 class="text-center my-3 mt-4 pen"> Sign Up to <span style="color: orangered; font-weight: 500;"><span
+                style="color: orange;">i</span>Shop</span></h1>
+
+    <hr class="w100p my-4">
+
+    <div class="container-fluid p-0 mt-3">
+
+        <!-- styles for form stuff -->
+        <style>
+            .badgeaction {
+                transform: translateY(-11px) translateX(45px);
+            }
+        </style>
+
+        <form action="/authenticateOurUser/signup/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container">
+                <!-- General details -->
+                <div class="container-fluid border border-primary-subtle px-0 py-4 rounded-2 position-relative">
+                    <span
+                        class="badge bg-primary-subtle border border-primary-subtle position-absolute top-0 start-0 badgeaction pen"
+                        title="This Section Covers Some General Details So That You Can Considerd As Our User.">General
+                        Details</span>
+                    <div class="row w100p p-0 m-0">
+                        <div class="col-4">
+                            <label for="ishopusername" class="form-label"
+                                title="Username should be unique">Username</label>
+                            <div class="input-group" title="Username should be unique">
+                                <span class="input-group-text pen">@</span>
+                                <input type="text" class="form-control bg-dark" id="ishopusername" name="userName"
+                                    title="Enter Username" placeholder="Username" required>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <label for="ishopfirstname" class="form-label" title="Your First And Last Name">Name</label>
+                            <div class="input-group" title="Your First And Last Name">
+                                <span class="input-group-text pen">First and last name</span>
+                                <input type="text" aria-label="First name" name="firstName" class="form-control bg-dark"
+                                    title="Enter Your First Name" placeholder="First name" required>
+                                <input type="text" aria-label="Last name" name="lastName" class="form-control bg-dark"
+                                    title="Enter Your Last Name" placeholder="Last name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row w100p p-0 mx-0 my-3">
+                        <div class="col-4">
+                            <label for="userBirthDate" class="form-label" title="Your Date Of Birth">Date Of
+                                Birth</label>
+                            <div class="input-group" title="Your Date Of Birth">
+                                <span class="input-group-text"><ion-icon name="gift"></ion-icon></span>
+                                <input type="date" class="form-control bg-dark" id="userBirthDate" name="userBirthDate"
+                                    title="Enter Your Date Of Birth" required>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label for="userGender" class="form-label" title="Your Gender">Gender</label>
+                            <div class="input-group" title="Your Gender">
+                                <span class="input-group-text"><ion-icon name="male-female"></ion-icon></span>
+                                <select class="form-select bg-dark" id="userGender" name="userGender"
+                                    title="Choose Your Gender" required>
+                                    <option value="-----" selected>-----</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label for="userProfilePhoto" class="form-label" title="Upload Your Profile Picture">Profile
+                                Photo</label>
+                            <div class="input-group" title="Upload Your Profile Picture">
+                                <div class="input-group mb-3">
+                                    <input type="file" class="form-control bg-dark" name="useravatar"
+                                        title="Upload Your Profile Picture">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- contact and encryption details -->
+                <div class="container-fluid border border-info-subtle px-0 py-4 rounded-2 position-relative my-5">
+                    <span
+                        class="badge bg-info-subtle border border-info-subtle position-absolute top-0 start-0 badgeaction pen"
+                        title="This Section Is For Contact Details So That We'll Contact To You.">Contact
+                        Details</span>
+                    <div class="row w100p p-0 mx-0 my-3">
+                        <div class="col-4">
+                            <label for="userEmail" class="form-label" title="Your Email">Email</label>
+                            <div class="input-group" title="Your Email">
+                                <span class="input-group-text"><ion-icon name="mail"></ion-icon></span>
+                                <input type="text" class="form-control bg-dark" id="userEmail" name="userEmail"
+                                    placeholder="youremail@email.com" title="Enter Your Email" required>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <label for="userPassword" class="form-label" title="Passwords">Passwords</label>
+                            <div class="input-group mb-3" title="Passwords">
+                                <span class="input-group-text" title="Enter Password"><ion-icon
+                                        name="key-outline"></ion-icon></span>
+                                <input type="password" class="form-control bg-dark" id="userPassword"
+                                    name="userPassword" title="Enter Password" placeholder="Enter Password" required>
+                                <span class="input-group-text" title="Confirm Your Password"><ion-icon
+                                        name="key-sharp"></ion-icon></span>
+                                <input type="password" class="form-control bg-dark" id="userPasswordConfirm"
+                                    name="userPasswordConfirm" title="Confirm Your Password"
+                                    placeholder="Confirm Password" required>
+                                <div class="valid-feedback" id="validity-status">
+                                    Passwords Matched!
+                                </div>
+                            </div>
+                        </div>
+                        <!-- scripts for password check -->
+                        <script>
+
+                            function validatePasswordInstantly() {
+                                const userPassword = document.getElementById('userPassword');
+                                const userPasswordConfirm = document.getElementById('userPasswordConfirm');
+                                const validityStatus = document.getElementById('validity-status');
+
+                                if (userPassword.value == '' || userPasswordConfirm.value == '') {
+                                    if (userPassword.classList.contains('is-valid')) {
+                                        userPassword.classList.remove('is-valid');
+                                    }
+                                    if (userPasswordConfirm.classList.contains('is-valid')) {
+                                        userPasswordConfirm.classList.remove('is-valid');
+                                    }
+                                    if (userPassword.classList.contains('is-invalid')) {
+                                        userPassword.classList.remove('is-invalid');
+                                    }
+                                    if (userPasswordConfirm.classList.contains('is-invalid')) {
+                                        userPasswordConfirm.classList.remove('is-invalid');
+                                    }
+                                    validityStatus.innerHTML = ``;
+                                } else if (userPassword.value == userPasswordConfirm.value) {
+                                    if (userPassword.classList.contains('is-invalid')) {
+                                        userPassword.classList.remove('is-invalid');
+                                    }
+                                    if (userPasswordConfirm.classList.contains('is-invalid')) {
+                                        userPasswordConfirm.classList.remove('is-invalid');
+                                    }
+                                    userPassword.classList.add('is-valid');
+                                    userPasswordConfirm.classList.add('is-valid');
+                                    if (validityStatus.classList.contains('invalid-feedback')) {
+                                        validityStatus.classList.remove('invalid-feedback');
+                                        validityStatus.classList.add('valid-feedback');
+                                    }
+                                    validityStatus.style.display = `block`;
+                                    validityStatus.innerHTML = `Passwords Matched!`;
+                                } else if (userPassword.value != userPasswordConfirm.value) {
+                                    if (userPassword.classList.contains('is-valid')) {
+                                        userPassword.classList.remove('is-valid');
+                                    }
+                                    if (userPasswordConfirm.classList.contains('is-valid')) {
+                                        userPasswordConfirm.classList.remove('is-valid');
+                                    }
+                                    userPassword.classList.add('is-invalid');
+                                    userPasswordConfirm.classList.add('is-invalid');
+                                    if (validityStatus.classList.contains('valid-feedback')) {
+                                        validityStatus.classList.remove('valid-feedback');
+                                        validityStatus.classList.add('invalid-feedback');
+                                    }
+                                    validityStatus.style.display = `block`;
+                                    validityStatus.innerHTML = `Passwords Don't Match!`;
+                                }
+                            }
+
+                            document.getElementById("userPassword").addEventListener("keyup", validatePasswordInstantly);
+                            document.getElementById("userPasswordConfirm").addEventListener("keyup", validatePasswordInstantly);
+
+                        </script>
+                    </div>
+                    <div class="row w100p p-0 mx-0 my-3">
+                        <div class="col-12">
+
+                            <label for="userPhoneAlt" class="form-label" title="Phone Details">Phone</label>
+                            <div class="input-group mb-3" title="Phone Details">
+                                <span class="input-group-text" title="Enter Phone Number"><ion-icon
+                                        name="call"></ion-icon></span>
+                                <input type="tel" class="form-control bg-dark" id="userPhone" name="userPhone"
+                                    title="Enter Phone Number" placeholder="Enter Phone Number" required>
+                                <span class="input-group-text" title="Enter Alternate Phone Number"><ion-icon
+                                        name="medical"></ion-icon></span>
+                                <input type="tel" class="form-control bg-dark" id="userPhoneAlt" name="userPhoneAlt"
+                                    title="Enter Alternate Phone Number If You Want"
+                                    placeholder="Phone Alternate (optional)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- location details -->
+                <div class="container-fluid border border-warning-subtle px-0 py-4 rounded-2 position-relative my-3">
+                    <span
+                        class="badge bg-warning-subtle border border-warning-subtle position-absolute top-0 start-0 badgeaction pen"
+                        title="This Section Is For Location Details. We'll Use is For Shipping Porpuses Only">Location
+                        Details</span>
+                    <div class="row w100p p-0 m-0">
+                        <div class="col-6">
+                            <label for="userAddressCountry" class="form-label" title="Your Country">Country</label>
+                            <div class="input-group" title="Your Country">
+                                <span class="input-group-text"><ion-icon name="earth"></ion-icon></span>
+                                <input type="text" class="form-control bg-dark" id="userAddressCountry"
+                                    name="userAddressCountry" title="Enter Your Country Name" required>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label for="userAddressState" class="form-label" title="Your State">State</label>
+                            <div class="input-group" title="Your State">
+                                <span class="input-group-text"><ion-icon name="map"></ion-icon></span>
+                                <input type="text" class="form-control bg-dark" id="userAddressState"
+                                    name="userAddressState" title="Enter Your State Name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row w100p p-0 mx-0 my-3">
+                        <div class="col-6">
+                            <label for="userAddressCity" class="form-label" title="Your City">City</label>
+                            <div class="input-group" title="Your City">
+                                <span class="input-group-text"><ion-icon name="home"></ion-icon></span>
+                                <input type="text" class="form-control bg-dark" id="userAddressCity"
+                                    name="userAddressCity" title="Enter Your City Name" required>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label for="userAddressZip" class="form-label" title="Pin Code Of Your Area">Pin
+                                Code</label>
+                            <div class="input-group" title="Pin Code Of Your Area">
+                                <span class="input-group-text"><ion-icon name="pin"></ion-icon></span>
+                                <input type="text" class="form-control bg-dark" id="userAddressZip"
+                                    name="userAddressZip" title="Enter Pin Code Of Your Area" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <!-- Submission -->
+            <div class="container-fluid d-flex justify-content-between align-items-center ps-5 pe-3">
+                <div class="d-flex justify-content-start align-items-center ">
+                    <input class="form-check-input m-3" type="checkbox" value="" id="iShopAgreement" required>
+                    <label class="form-check-label" for="iShopAgreement" title="Confirm To Create Account">
+                        I want to create account on iShop.
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary float-end m-5 mt-3 disabled" id="iShopCreateAccountButton"
+                    title="Create Account">Create Account</button>
+            </div>
+
+
+        </form>
+    </div>
+
+</section>
+
+{% block js %}
+
+<script>
+    iShopAgreement.onclick = function () {
+        if (iShopAgreement.checked == true) {
+            iShopCreateAccountButton.classList.remove('disabled');
+        } else {
+            iShopCreateAccountButton.classList.add('disabled');
+        }
+    }
+</script>
+
+{% endblock js %}
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Categories{% endblock title %}
+
+{% block stylesheet %}
+<style>
+    .radialRpt-bg {
+        background-image: repeating-radial-gradient(#464444, transparent 100px);
+    }
+    .radialRpt-bg-light {
+        background-image: repeating-radial-gradient(#626262, transparent 100px);
+    }
+</style>
+{% endblock stylesheet %}
+
+{% block body %}
+
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">All <span class="text-info">Categories</span> Of Long Range <span
+                    class="text-warning">IceCreams</span></h1>
+            <p class="lead text-body-secondary">Something special about the collection of our wide range
+                of icecreams below—its contents,
+                we make sure the taste, flavour, quality and most importantly feelings of our icecreams should be
+                proper. Our
+                icecreams made totally with Love which make it delicius and sweet.</p>
+            <p class="m-0">Enjoy Our IceCreams!</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<main class="container p-0 d-flex" style="flex-wrap: wrap;">
+
+    <!-- Cards -->
+
+    {% for category in allCategory %}
+
+    <div class="card shadow-sm border-info-subtle overflow-hidden m-4" style="width: 500px;">
+        <div class="radialRpt-bg">
+            <img src="/static/iceCreams/flavours/ball.png"
+                style="filter: {{ category.filter_color }};"
+                alt="">
+        </div>
+        <hr class="p-0 m-0">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title text-info">{{ category.name }}</h5>
+                <div class="btn">
+                    <form action="#" method="post">
+                        <input type="hidden" name="product">
+                        <a role="button" href="/stock/{{ category.slug }}" class="btn btn-sm btn-outline-success" title="Order Now">View all</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+</main>
+
+
+<!-- Butterscotch : invert(1%) sepia(1%) saturate(444%) hue-rotate(113deg) brightness(227%) contrast(101%)  rotate to change flavours --test-2 -->
+<!-- Butterscotch : invert(1%) sepia(1%) saturate(244%) hue-rotate(85deg) brightness(226%) contrast(107%)  rotate to change flavours test--1 -->
+
+{% endblock body %}

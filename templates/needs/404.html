@@ -1,0 +1,17 @@
+{% extends 'base-blank.html' %}
+{% block title %}404 - Not Found{% endblock title %}
+{% block stylesheet %}
+<link rel="stylesheet" href="/static/css/custom/404.css"> 
+{% endblock stylesheet %}
+{% block body %}
+<div class="text-center mt-5">
+    <div class="error mx-auto mt-5" data-text="404">404</div>
+    <p class="lead text-gray-800 mb-5">Page Not Found</p>
+    {% if user.is_authenticated %}
+    <p class="text-gray-500 mb-0">Hey {{ request.user }}, This page not exist</p>
+    {% else %}
+    <p class="text-gray-500 mb-0">This page not exist</p>
+    {% endif %}
+    <a href="/">Back to iShop</a>
+</div>
+{% endblock %}

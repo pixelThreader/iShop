@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Cart{% endblock title %}
+
+
+{% block body %}
+
+<section class="pt-5 pb-5 usn">
+    <div class="container">
+        <div class="row w-100">
+            <div class="col-lg-12 col-md-12 col-12">
+                <h3 class="display-5 mb-2 text-center">Shopping Cart</h3>
+                <p class="mb-5 text-center">
+                    <i class="text-info font-weight-bold">{{ CartItems|length }}</i> items in your cart
+                </p>
+
+                {% if CartItems|length == 0 %}
+                <div class="container-fluid ps-0">
+                    <hr class="my-4">
+                </div>
+                {% endif %}
+
+                {% if CartItems|length != 0 %}
+
+                <table id="shoppingCart" class="table table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="width:60%">Product</th>
+                            <th style="width:14%">Price/Box</th>
+                            <th style="width:10%">Quantity</th>
+                            <th style="width:16%"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartproductsinserted">
+
+                        {% for item in CartItems %}
+                        <tr class="cart">
+                            <td data-th="Product">
+                                <a href="/stock/products/{{ item.item.product_slug }}" style="text-decoration: none;">
+                                    <div class="row">
+                                        <div class="col-md-3 text-left">
+                                            <img src="/static/Uploaded_Products/{{ item.item.product_image }}"
+                                                alt="_product" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
+                                        </div>
+                                        <div class="col-md-9 text-left mt-sm-2">
+                                            <h4>{{ item.item.product_name }}</h4>
+                                            <p class="font-weight-light text-muted">{{ item.item.product_manufacturer }}
+                                            </p>
+                                            <p class="font-weight-light text-muted">Size selected : {{ item.size }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </td>
+                            <td data-th="Price" class="product_price">
+                                <div class="input-group" style="top: 48px;">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="text" class="form-control bg-dark product_price" id="product_price"
+                                        value="{{ item.item.product_price }}" readonly>
+                                </div>
+                            </td>
+                            <td data-th="Quantity" class="position-relative">
+                                <div class="input-group mb-3" style="width: 170px; top: 48px;">
+                                    <button class="btn btn-white border border-secondary px-3 text-light" type="button"
+                                        id="button-dec{{ item.item.product_sno }}" currno="{{ item.item.product_sno }}"
+                                        onclick="minus(this)"
+                                        data-mdb-ripple-color="dark">
+                                        -
+                                    </button>
+                                    <input type="text"
+                                        class="form-control text-center border border-secondary bg-dark text-light qty"
+                                        id="number_of_product{{ item.item.product_sno }}" value="{{ item.quantity }}">
+                                    <button class="btn btn-white border border-secondary px-3 text-light" type="button"
+                                        id="button-add{{ item.item.product_sno }}" currno="{{ item.item.product_sno }}"
+                                        onclick="plus(this)" data-mdb-ripple-color="dark">
+                                        +
+                                    </button>
+                                </div>
+                                <form action="/cart/updateCart/" method="post" id="save{{ item.item.product_sno }}"
+                                    currno="{{ item.quantity }}" class="d-none">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="updated_cart_id" value="{{ item.item.products_id }}">
+                                    <input type="hidden" name="updated_cart" id="updated_cart{{ item.item.product_sno }}">
+                                    <button type="submit" class="btn btn-success rounded-pill position-absolute btn-sm"
+                                        style="transform: translateX(122px) translateY(51px);">Save</button>
+                                </form>
+                            </td>
+                            <td class="actions" data-th="">
+                                <div class="text-center">
+                                    <div>
+                                        <form action="/cart/deleteitemcart/" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="DeleteThisIcecream"
+                                                value="{{ item.item.products_id}}">
+                                            <button
+                                                class="btn btn-white border-danger-subtle p-1 rounded-circle btn-md mb-2 mt-5"
+                                                title="Remove Product" type="submit">
+                                                <img src="/static/svgs/trash-outline.svg" alt="icon" height="30px"
+                                                    width="30px"
+                                                    style="filter: invert(41%) sepia(46%) saturate(2465%) hue-rotate(328deg) brightness(98%) contrast(106%);">
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+
+                    </tbody>
+                </table>
+
+                {% else %}
+
+                <h5 class="text-center text-capitalize mt-5 mb-4">
+                    Your Cart Is Empty! Hurry Up Fill it with some
+                    delicious
+                    IceCreams
+                </h5>
+
+
+                {% endif %}
+
+                {% if CartItems|length != 0 %}
+                <div class="container-fluid p-0 m-0 d-flex justify-content-end align-items-center">
+                    <div class="text-right">
+                        <h4>Subtotal:</h4>
+                        <h1 id="subtotal">$00.00</h1>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="container-fluid ps-0">
+            <hr class="my-4">
+        </div>
+
+        <div class="row mt-4 d-flex align-items-center">
+            {% if CartItems|length != 0 %}
+            <div class="col-sm-6 order-md-2 text-right d-flex align-items-center justify-content-end">
+                <a href="/retail/checkout" class="btn btn-success mb-4 btn-lg pl-5 pr-5 rounded-pill">Proceed to
+                    Checkout</a>
+            </div>
+            {% endif %}
+
+            {% if CartItems|length != 0 %}
+            <div class="col-sm-6 mb-3 mb-m-1 order-md-1 text-md-left">
+                <a class="btn btn-sm btn-outline-warning" href="/stock/products">
+                    Continue Shopping</a>
+            </div>
+            {% else %}
+            <div class="col-sm-12 mb-3 mb-m-1 order-md-1 text-md-left d-flex justify-content-center align-items-center">
+                <a class="btn btn-sm btn-outline-warning" href="/stock/products">
+                    Continue Shopping</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% block js %}
+<script>
+    // script for integrating button '+' and '-'
+    /* i will use on click in html button tag*/
+    function evaluate() {
+        // get all the product prices and quantities
+        const productPrices = document.querySelectorAll('.product_price input');
+        const productQuantities = document.querySelectorAll('.qty');
+        // initialize the subtotal to zero
+        let subtotal = 0;
+        // loop through each product and calculate its price based on quantity
+        for (let i = 0; i < productPrices.length; i++) {
+            let price = parseFloat(productPrices[i].value);
+            let quantity = parseInt(productQuantities[i].value);
+            subtotal += price * quantity;
+        }
+        // display the subtotal
+        document.getElementById('subtotal').textContent = '₹' + subtotal.toFixed(2);
+    };
+    window.onload = function () {
+        evaluate()
+    };
+    function plus(e) {
+        let addbutton = e.getAttributeNode('id').value;
+        let addbuttonsno = e.getAttributeNode('currno').value;
+        let subbutton = document.getElementById(`button-dec${addbuttonsno}`);
+        let inputQ = document.getElementById(`number_of_product${addbuttonsno}`);
+        let inputupdatedCart = document.getElementById(`updated_cart${addbuttonsno}`);
+        let saveBtn = document.getElementById(`save${addbuttonsno}`);
+        inputQ.value++
+        inputupdatedCart.value = inputQ.value
+        disableing(inputQ, subbutton)
+        let savenumber = saveBtn.getAttributeNode('currno').value;
+        subbutton.classList.remove('disabled')
+        if (savenumber == inputQ.value) {
+            saveBtn.classList.remove('d-none')
+            saveBtn.classList.add('d-none')
+        } else {
+            saveBtn.classList.remove('d-none')
+        }
+        evaluate()
+    };
+    function disableing(inputname, trgt) {
+        if (inputname.value == 2) {
+            trgt.classList.remove('disabled');
+        } else if (inputname.value >= 2) {
+            trgt.classList.remove('disabled');
+        } else {
+            trgt.classList.add('disabled');
+        }
+    };
+    function minus(e) {
+        let addbutton = e.getAttributeNode('id').value;
+        let addbuttonsno = e.getAttributeNode('currno').value;
+        let subbutton = document.getElementById(`button-dec${addbuttonsno}`);
+        let inputupdatedCart = document.getElementById(`updated_cart${addbuttonsno}`);
+        let inputQ = document.getElementById(`number_of_product${addbuttonsno}`);
+        let saveBtn = document.getElementById(`save${addbuttonsno}`);
+        inputQ.value--;
+        inputupdatedCart.value = inputQ.value
+        disableing(inputQ, subbutton)
+        let savenumber = saveBtn.getAttributeNode('currno').value;
+        if (savenumber != inputQ.value) {
+            saveBtn.classList.remove('d-none')
+        } else {
+            saveBtn.classList.add('d-none')
+        }
+        evaluate()
+    };
+</script>
+{% endblock js %}
+
+{% endblock body %}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %}{% endblock title %} | iShop </title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="/static/brand/iShop.png" type="image/x-icon">
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        body::-webkit-scrollbar {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 5px;
+            background: transparent;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            width: 100%;
+            background: #555;
+            border-radius: 5px;
+        }
+
+        .scroll-access::-webkit-scrollbar {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 5px;
+            background: transparent;
+        }
+
+        .scroll-access::-webkit-scrollbar-thumb {
+            width: 100%;
+            background: #555;
+        }
+
+        .usn {
+            user-select: none;
+        }
+
+        #backToTop {
+            position: fixed;
+            height: 40px;
+            width: 40px;
+            background: #0000002b;
+            bottom: 0;
+            right: 0;
+            margin: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            border: 1px solid gray;
+        }
+
+        #backToTop svg polyline {
+            fill: none;
+            stroke: #1cc3cc;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 32px;
+            filter: drop-shadow(0 0 8px #1cc);
+        }
+
+        #backToTop svg path {
+            fill: none;
+            stroke: #1cc3cc;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+            stroke-dasharray: 1300;
+            stroke-dashoffset: 0;
+            transition: .3s;
+        }
+
+        #backToTop:hover svg path {
+            fill: none;
+            stroke: #1cc3cc;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 450;
+            transition: .5s;
+        }
+    </style>
+    {% block stylesheet %}{% endblock stylesheet %}
+</head>
+
+<body data-bs-theme="dark">
+
+    <div class="container-fluid scroll-access" style="height: 100vh;">
+        {% block body %}{% endblock body %}
+    </div>
+
+    <!-- Back top top -->
+    <button id="backToTop" title="Go to Top" toWhere="#page-top" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 512 512">
+            <polyline points="352 296 256 200 160 296" />
+            <path d="M256,64C150,64,64,150,64,256s86,192,192,192,192-86,192-192S362,64,256,64Z" />
+        </svg>
+    </button>
+
+    {% if messages %}
+    <!-- alert -->
+    <style>
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+            animation: none;
+        }
+    </style>
+    <div class="container-fluid position-fixed bottom-0" style="z-index: 9999">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show position-relative" style="width: 400px;"
+            data-bs-theme="dark" role="alert" id="myAlert">
+            <div class="h6 text-center border-bottom pb-3">
+                <img src="/static/brand/iShop.png" alt="30px" height="" width="30px" class="position-absolute start-0"
+                    style="transform: translateX(24px) translateY(-5px);">
+                <span style="color: orangered; font-weight: 500;">
+                    <span style="color: orange;">i</span>Shop
+                </span> Message
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <p>
+                {{ message }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- script for alert -->
+    <script>
+        var myAlerts = document.querySelectorAll('.alert');
+        myAlerts.forEach(function (alert) {
+            setTimeout(function () {
+                alert.classList.add('fade-out');
+                setTimeout(function () {
+                    alert.style.display = "none";
+                }, 500);
+            }, 3000);
+        });
+    </script>
+    {% endif %}
+
+    <!-- Required scripts -->
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/jquery-3.7.0.min.js"></script>
+    <!-- ionicons scripts -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <!-- back top top scripts -->
+    <script src="/static/js/jquery.easing.min.js"></script>
+    <script src="/static/js/backtotop.js"></script>
+    {% block js %}{% endblock js %}
+
+</body>
+
+</html>

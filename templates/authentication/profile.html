@@ -1,0 +1,348 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block body %}
+<section class="container-fluid p-0">
+
+    <!-- Heading -->
+    <h1 class="text-center text-warning my-5">My Profile</h1>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-4">
+
+                <!-- Photo And Edit -->
+
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <!-- Profile Picture -->
+                        <img src="/static/Uploaded_Products/{{ request.user.additionalusercredentials.Avatar }}" alt="avatar"
+                            class="rounded-circle img-fluid" style="width: 150px;" title="Your Profile Photo" />
+                        <h5 class="my-3 pen" title="Hii, {{ request.user }}">{{ request.user }}</h5> <!-- Username -->
+                        {% if user.is_superuser %}
+                        <p class="mb-2 pen">
+                            <span style="color: orangered; font-weight: 500;"><span style="color: orange;">i</span>Shop</span>
+                            <span class="text-muted pen">Admin</span>
+                        </p>
+                        {% else %}
+                        <p class="mb-2 pen">
+                            <span style="color: orangered; font-weight: 500;"><span style="color: orange;">i</span>Shop</span> 
+                            <span class="text-muted pen">Customer</span>
+                        </p>
+                        {% endif %}
+                        <p class="text-muted mb-4 pen" title="Your Address">
+                            {{ request.user.additionalusercredentials.city }},
+                            {{ request.user.additionalusercredentials.state }},
+                            {{ request.user.additionalusercredentials.country }}</p> <!-- Address -->
+                        <div class="d-flex justify-content-center mb-2">
+                            <!-- Edit Modal Toggle Button -->
+                            <button type="button" class="btn btn-primary" title="Edit Your Profile"
+                                data-bs-toggle="modal" data-bs-target="#EditProfileModal">Edit
+                                Profile</button>
+                        </div>
+                        <!-- Profile Edit Modal -->
+                        <div class="modal modal-lg fade" id="EditProfileModal" tabindex="-1"
+                            aria-labelledby="EditProfileModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5 pen" id="EditProfileModalLabel">Edit Profile
+                                        </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Edit Form -->
+                                        Form Of Edit..
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary btn-sm"
+                                            data-bs-dismiss="modal">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Order Informations -->
+
+                <div class="card mb-4 mb-lg-0">
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush rounded-3">
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3 pen"
+                                title="You totally orderd 0 icecreams from us..">
+                                Total Orders :<p class="mb-0 text-info">0</p>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3 pen"
+                                title="You totally have {{ cuponUnused|length }} Cupons..">
+                                Cupons Available :<p class="mb-0 text-info">
+                                    {{ cuponUnused|length }}
+                                </p>
+                            </li>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3 pen"
+                                title="You totally used {{ cuponUsed|length }} Cupons..">
+                                Cupons Used :<p class="mb-0 text-info">
+                                    {{ cuponUsed|length }}
+                                </p>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3 pen"
+                                title="Your favourite icecreams">
+                                Total Favourites :<p class="mb-0 text-info">0</p>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3 pen"
+                                title="You joined us at {{ request.user.date_joined }}">
+                                Joined iShop At :<p class="mb-0 text-info">{{ request.user.date_joined }}</p>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3 pen"
+                                title="Your location's PinCode">
+                                Pin Code :<p class="mb-0 text-info">{{ request.user.additionalusercredentials.pinCode }}
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-8">
+                <div class="card mb-4">
+
+                    <!-- Personal Details -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 pen">Full Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="mb-0 text-info pen" title="Here's Your Full Name">
+                                    {{ request.user.first_name }}
+                                    {{ request.user.last_name }}
+                                </p>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 pen">Birth</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="mb-0 text-info pen" title="Here's Your Date Of Birth">
+                                    {{ request.user.additionalusercredentials.birth }}</p>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 pen">Gender</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="mb-0 text-info pen" title="Here's Your Gender"
+                                    style="text-transform: capitalize;">
+                                    {{ request.user.additionalusercredentials.gender }}
+                                </p>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 pen">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="mb-0 text-info pen" title="Here's Your Email">{{ request.user.email }}</p>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 pen">Phone 1</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="mb-0 text-info pen" title="Here's Your First Phone Number">
+                                    {{ request.user.additionalusercredentials.phone }}</p>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 pen">Phone 2</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="mb-0 text-info pen" title="Here's Your Second Alternate Phone Number ">
+                                    {{ request.user.additionalusercredentials.phone_alt }}</p>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 pen">Address</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="mb-0 text-info pen" title="Here's Your Address">
+                                    {{ request.user.additionalusercredentials.city }},
+                                    {{ request.user.additionalusercredentials.state }},
+                                    {{ request.user.additionalusercredentials.country }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- Generated User ID -->
+                    <div class="col-md-6">
+                        <div class="card mb-4 mb-md-0">
+                            <div class="card-body position-relative" title="Don't Share it with anyone">
+                                <style>
+                                    #k0002 {
+                                        height: 30px;
+                                        width: 30px;
+                                        border: none;
+                                        display: flex !important;
+                                        justify-content: center !important;
+                                        align-items: center !important;
+                                        background: transparent;
+                                        transform: translateX(280px) translateY(-2px);
+                                    }
+
+                                    #k0002:hover #k0001 {
+                                        filter: invert(50%) sepia(81%) saturate(389%) hue-rotate(143deg) brightness(92%) contrast(92%);
+                                    }
+
+                                    #k0001 {
+                                        position: relative;
+                                        filter: invert(57%) sepia(0%) saturate(1%) hue-rotate(176deg) brightness(94%) contrast(96%);
+                                    }
+                                </style>
+                                <button class="btn btn-sm btn-outline-info rounded-circle position-absolute p-0"
+                                    id="k0002" title="Help" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#GeneratedIDModal">
+                                    <img src="/static/svgs/information-circle-outline.svg" height="90%" width="90%"
+                                        alt="help" class="img-fluid" id="k0001" />
+                                </button>
+
+                                <p class="mb-4 px-3">
+                                    <span class="text-primary font-italic me-1 pen">Your "Generated Ids"</span>
+                                </p>
+                                <hr>
+                                <p class="mb-1 pen" style="font-size: .77rem;">Id One</p>
+                                <div class="h3 mb-3 pen" title="Your First Id">{{ request.user.additionalusercredentials.Emergency_id01 }}</div>
+
+                                <p class="mb-1 pen" style="font-size: .77rem;">Id Two</p>
+                                <div class="h3 pen" title="Your Second Id">{{ request.user.additionalusercredentials.Emergency_id02 }}</div>
+
+                                <!-- Modal For Help(Generated Id) -->
+
+                                <div class="modal fade" id="GeneratedIDModal" tabindex="-1"
+                                    aria-labelledby="GeneratedIDModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5 pen" id="GeneratedIDModalLabel">Help Generated
+                                                    IDs
+                                                </h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body pen">
+                                                The Code generated To Verify You in <strong class="text-danger">Crucial
+                                                    Situations</strong>.
+                                                <ul>
+                                                    <li>Forgotten Password</li>
+                                                    <li>Fraud In Delivered Product</li>
+                                                </ul>
+                                                The Code Generated <strong class="text-info">Friendly</strong>.
+                                                <ul>
+                                                    <li>Dial code of your country</li>
+                                                    <li>Your username</li>
+                                                    <li>Our AI generates 3 random digits for better encryption.</li>
+                                                </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary btn-sm"
+                                                    data-bs-dismiss="modal">Got It</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Important Links -->
+
+                    <div class="col-md-6">
+                        <div class="card mb-4 mb-md-0">
+                            <div class="card-body p-1">
+                                <!-- list Of Important Links -->
+                                <style>
+                                    #i0001 {
+                                        filter: invert(23%) sepia(82%) saturate(5222%) hue-rotate(353deg) brightness(92%) contrast(127%);
+                                    }
+
+                                    #i0002 {
+                                        filter: invert(75%) sepia(46%) saturate(7462%) hue-rotate(81deg) brightness(118%) contrast(123%);
+                                    }
+
+                                    #i0003 {
+                                        filter: invert(49%) sepia(136%) saturate(728%) hue-rotate(349deg) brightness(189%) contrast(115%);
+                                    }
+
+                                    #i0004 {
+                                        filter: invert(54%) sepia(59%) saturate(1866%) hue-rotate(182deg) brightness(86%) contrast(90%);
+                                    }
+                                </style>
+                                <ul class="list-group list-group-flush rounded-3 p-0">
+                                    <div class="container-fluid d-flex justify-content-center align-items-center pt-2">
+                                        <h6 class="text-primary pen">Additional Links</h6>
+                                    </div>
+                                    <hr class="my-2">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center p-0"
+                                        title="View your favourite icecreams">
+                                        <a href="#" class="p-3 text-decoration-none" style="width: 100%;">
+                                            <img src="/static/svgs/heart-fill.svg" height="20px" width="20px"
+                                                class="me-3" alt="" id="i0001">
+                                            Your Favourites</a>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center p-0"
+                                        title="View your available Cupons">
+                                        <a href="/retail/my-cupons" class="p-3 text-decoration-none" style="width: 100%;">
+                                            <img src="/static/svgs/discount-coupon.svg" height="20px" width="20px"
+                                                class="me-3" alt="" id="i0002">
+                                            Available Cupons</a>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center p-0"
+                                        title="View your previus orders">
+                                        <a href="#" class="p-3 text-decoration-none" style="width: 100%;">
+                                            <img src="/static/svgs/box2-heart-fill.svg" height="20px" width="20px"
+                                                class="me-3" alt="" id="i0003">
+                                            Previus Orders</a>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center p-0"
+                                        title="Add another account">
+                                        <a href="/authenticateOurUser/signup" class="p-3 text-decoration-none" style="width: 100%;">
+                                            <img src="/static/svgs/add-user.svg" height="20px" width="20px" class="me-3"
+                                                alt="" id="i0004">
+                                            Add other Account</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

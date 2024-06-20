@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us{% endblock title %}
+
+{% block miniNav %}d-none{% endblock miniNav %}
+
+{% block stylesheet %}
+
+<style>
+    .h100p {
+        height: 100%;
+    }
+
+    .h85p {
+        height: 85%;
+    }
+
+    .w85p {
+        width: 85%;
+    }
+
+    .img-fit-correctly {
+        object-fit: contain;
+    }
+
+    .message {
+        height: 125px;
+        resize: none;
+    }
+</style>
+
+{% endblock stylesheet %}
+
+{% block body %}
+
+<main class="container-fluid p-3 border h100p rounded-2">
+
+    <div class="row m-0 p-0 h100p">
+        <section class="col-5 border-end h100p pb-3">
+            <div
+                class="container-fluid p-0 d-flex justify-content-center align-items-center img-fit-correctly h100p w95p">
+                <img src="/static/svgs/Contact.png" alt="" class="img-responsive rounded-2" height="100%" width="100%">
+            </div>
+        </section>
+        <section class="col-7 border-start h100p position-relative">
+
+            <h2 class="text-start ps-4 pb-2 border-bottom border-3">Contact Us <a href="/"
+                    style="text-decoration: none;"><sup style="color: orangered; font-weight: normal;" class="ms-5">
+                        <span style="color: orange;">i</span>Shop</sup></a></h2>
+
+
+
+            <form action="/contact/" method="post" class="h85p py-2 w100p" id="FormContact">
+                {% csrf_token %}
+
+                <div class="row w100p p-0 m-0">
+                    <div class="col-6">
+                        <label for="ishopcontactname" class="form-label" title="Your Name">Name</label>
+                        <div class="input-group" title="Your Name">
+                            <span class="input-group-text pen">
+                                <ion-icon name="person"></ion-icon>
+                            </span>
+                            <input type="text" class="form-control bg-dark" id="ishopcontactname" name="name_contact"
+                                title="Enter Your Name" placeholder="Your Name" required>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label for="ishopcontactphone" class="form-label" title="Your Phone">Phone</label>
+                        <div class="input-group" title="Your Phone">
+                            <span class="input-group-text pen">
+                                <ion-icon name="call"></ion-icon>
+                            </span>
+                            <input type="text" class="form-control bg-dark" id="ishopcontactphone" name="phone_contact"
+                                title="Enter Your Phone" placeholder="Your Phone" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row w100p p-0 m-0 mt-3">
+                    <div class="col-12">
+                        <label for="ishopcontactemail" class="form-label" title="Your Email">Email</label>
+                        <div class="input-group" title="Your Email">
+                            <span class="input-group-text pen">
+                                @
+                            </span>
+                            <input type="email" class="form-control bg-dark" id="ishopcontactemail" name="email_contact"
+                                title="Enter Your Email" placeholder="Your Email" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row w100p p-0 m-0 mt-3">
+                    <div class="col-12">
+                        <label for="ishopcontactmessage" class="form-label" title="Your Message">Message</label>
+                        <div class="input-group" title="Your Message">
+                            <span class="input-group-text pen">
+                                <ion-icon name="chatbubble-ellipses"></ion-icon>
+                            </span>
+                            <textarea class="form-control bg-dark message scroll-access" id="ishopcontactmessage"
+                                name="message_contact" title="Enter Your Message" placeholder="Your Message..."
+                                required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submission -->
+                <div class="container-fluid d-flex justify-content-between align-items-center ps-5 pe-3 mt-3">
+                    <div class="d-flex justify-content-start align-items-center ">
+                        <input class="form-check-input m-3" type="checkbox" value="" id="iShopAgreement" required>
+                        <label class="form-check-label" for="iShopAgreement" title="Confirm To Create Account">
+                            I want to contact to iShop.
+                        </label>
+                    </div>
+
+                    <button type="submit"
+                        class="btn btn-primary float-end m-5 mb-0 mt-2 disabled d-flex align-items-center justify-content-center"
+                        id="iShopCreateAccountButton" title="Create Account" style="width: 150px;">Send <span
+                            style="transform: translateY(2px) translateX(10px);"><ion-icon
+                                name="send"></ion-icon></span></button>
+                </div>
+
+            </form>
+
+
+        </section>
+    </div>
+
+</main>
+
+<script>
+    iShopAgreement.onclick = function () {
+        if (iShopAgreement.checked == true) {
+            iShopCreateAccountButton.classList.remove('disabled');
+        } else {
+            iShopCreateAccountButton.classList.add('disabled');
+        }
+    }
+    // For async form submission
+    const formcontact = document.getElementById('FormContact');
+    const nameUser = document.getElementById('ishopcontactname');
+    const emailUser = document.getElementById('ishopcontactemail');
+    const phoneUser = document.getElementById('ishopcontactphone');
+    const msgUser = document.getElementById('ishopcontactmessage');
+    const subAgmtUser = document.getElementById('iShopAgreement');
+
+    formcontact.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(formcontact);
+
+        fetch(formcontact.action, {
+            method: formcontact.method,
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        }).then(response => response.json())
+            .then(data => {
+                // create alert element using message text and level
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${data.message_level} alert-dismissible fade show position-relative`;
+                alert.style.width = '400px';
+                alert.style.transform = "translateY(-120px) translateX(19px)";
+                alert.setAttribute('data-bs-theme', 'dark');
+                alert.setAttribute('role', 'alert');
+                alert.setAttribute('id', 'myAlert');
+                const alertContent = `
+            <div class="h6 text-center border-bottom pb-3">
+                <img src="/static/brand/iShop.png" alt="30px" height="" width="30px" class="position-absolute start-0"
+                    style="transform: translateX(24px) translateY(-5px);">
+                <span style="color: orangered; font-weight: 500;">
+                    <span style="color: orange;">i</span>Shop
+                </span> Message
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <p>${data.message_text}</p>
+            `;
+            // "idOfTheElement.reset()"
+                alert.innerHTML = alertContent;
+                document.body.appendChild(alert);
+                // clear form fields
+                nameUser.value = "";
+                emailUser.value = "";
+                phoneUser.value = "";
+                msgUser.value = "";
+                subAgmtUser.checked = false;
+            });
+    });
+
+
+
+
+</script>
+{% block js %}
+
+
+{% endblock js %}
+
+{% endblock body %}

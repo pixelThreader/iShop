@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}My Cupons{% endblock title %}
+
+{% block stylesheet %}
+<style>
+    .card.unused {
+        min-height: 100px;
+        width: 332px;
+        border-color: #00ff80;
+    }
+
+    .card.used {
+        min-height: 100px;
+        width: 332px;
+        border-color: #9d1c0e;
+    }
+
+    .usn {
+        user-select: none;
+    }
+
+    .used-cupon-wall {
+        height: 100%;
+        width: 100%;
+        z-index: 100;
+        background: #d55454d1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 36px;
+        color: antiquewhite;
+        /* mix-blend-mode: hard-light; */
+    }
+</style>
+{% endblock stylesheet %}
+
+{% block body %}
+
+<main class="usn">
+    <section id="availableCupons" class="container border border-success rounded-2 mt-4 pb-4 position-relative">
+        <h3 class="text-start m-4" style="color: #1ed16e; pointer-events: none;">Available Cupons</h3>
+        <form action="/retail/generate-cupons/" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="Targetuser" value="{{ request.user }}">
+            <button class="btn btn-sm btn-outline-secondary position-absolute" style="right: 40px; top: 26px;">Request a
+                Cupon</button>
+        </form>
+        <div class="container-fluid d-flex flex-wrap m-0 p-0 mx-2">
+            {% for cupon in NewCupons %}
+            <div class="card unused mx-3 mt-3">
+                <div class="card-title px-2 text-warning border-bottom" style="background: #5edb0057;">Cupon for
+                    <b>{{ cupon.cupon_discount }}%</b> off
+                </div>
+                <div class="card-body position-relative">
+                    <h6><span class="text-muted">Cupon name</span>: {{ cupon.cupon_name }}</h6>
+                    <p>
+                        <span class="text-muted">Code</span> : <span class="text-info">
+                            {{ cupon.cupon_code }}
+                        </span>
+                    </p>
+                    <div class="discount position-absolute d-flex justify-content-center align-items-center"
+                        style="height: 80px; width: 80px; top: 7px; right: 17px;">
+                        <h1 style="color: #00df26;">
+                            {{ cupon.cupon_discount }}%
+                        </h1>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span class="pen text-muted" style="font-size: 12px">Cupon no: {{ cupon.cupon_sno }}</span>
+                    <input type="hidden" name="hiddencode" id="cupon{{ cupon.cupon_sno }}" value="{{ cupon.cupon_code }}">
+                    <button class="btn btn-sm btn-primary float-end" onclick="copy('cupon{{ cupon.cupon_sno }}'), indicationCopied(this)">Copy Code</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% if UsedCupons|length == 0 %}
+    <div class="my-5"></div>
+    {% endif %}
+
+    <!-- For Used Cupons -->
+    {% if UsedCupons|length != 0 %}
+    <section id="UsedCupons" class="container border border-danger rounded-2 mt-4 pb-4 mb-5">
+        <h3 class="text-start m-4" style="color: #f93838; pointer-events: none;">Used Cupons</h3>
+        <div class="container-fluid d-flex flex-wrap m-0 p-0 mx-2">
+            {% for cupon in UsedCupons %}
+            <div class="card unused mx-3 mt-3 position-relative overflow-hidden">
+                <div class="used-cupon-wall position-absolute">
+                    <span style="pointer-events: none;">USED</span>
+                </div>
+                <div class="card-title px-2 text-warning border-bottom" style="background: #5edb0057;">Cupon for
+                    <b>{{ cupon.cupon_discount}}%</b> off
+                </div>
+                <div class="card-body position-relative">
+                    <h6>Cupon name: {{ cupon.cupon_name }}</h6>
+                    <p>Code : {{ cupon.cupon_code }}</p>
+                    <div class="discount position-absolute d-flex justify-content-center align-items-center"
+                        style="height: 80px; width: 80px; top: 7px; right: 17px;">
+                        <h1 style="color: #00df26;">
+                            {{ cupon.cupon_discount}}%
+                        </h1>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <h6 class="text-center text-muted">Used!</h6>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+    <script>
+        let copy = function (item) {
+            /* Select text area by id*/
+            var Text = document.getElementById(item);
+
+            /* Select the text inside text area. */
+            Text.select();
+
+            /* Copy selected text into clipboard */
+            navigator.clipboard.writeText(Text.value);
+        };
+        let indicationCopied = function (buttoncopy) {
+            setTimeout(() => {
+                buttoncopy.innerText = 'Copied!'
+                setTimeout(() => {
+                buttoncopy.innerText = 'Copy Code'
+            },2000)
+            },0)
+        }
+    </script>
+</main>
+
+
+{% endblock body %}

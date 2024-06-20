@@ -1,0 +1,628 @@
+{% extends 'base.html' %}
+
+{% load get_val %}
+
+{% load humanize %}
+
+{% block title %}{{ product.product_name }}{% endblock title %}
+
+{% block miniNav %}d-none{% endblock miniNav %}
+{% block contentContainerHeight %}88%{% endblock contentContainerHeight %}
+
+{% block stylesheet %}
+<style>
+    .red-svg {
+        filter: invert(43%) sepia(96%) saturate(7099%) hue-rotate(352deg) brightness(96%) contrast(105%);
+    }
+
+    .white-svg {
+        filter: invert(1);
+    }
+
+    .rating-star {
+        font-size: 20px;
+        color: gold;
+    }
+
+    .w100p {
+        width: 100% !important;
+    }
+
+    .h100p {
+        height: 100% !important;
+    }
+
+    .transition-5 {
+        transition: .5s ease-in-out !important;
+    }
+
+    .collapse.show,
+    .collapse.collapsing {
+        border-bottom: 1px solid #0fe6c2 !important;
+        border-left: 1px solid #0fe6c2 !important;
+        border-right: 1px solid #0fe6c2 !important;
+        border-top-left-radius: 0% !important;
+        border-top-right-radius: 0% !important;
+    }
+
+    .card.showreply {
+        border-top: 1px solid #0fe6c2 !important;
+        border-left: 1px solid #0fe6c2 !important;
+        border-right: 1px solid #0fe6c2 !important;
+        border-bottom-left-radius: 0% !important;
+        border-bottom-right-radius: 0% !important;
+    }
+</style>
+{% endblock stylesheet %}
+
+{% block body %}
+
+
+<section class="py-5">
+    <div class="container">
+        <div class="row gx-5">
+            <aside class="col-lg-6">
+                <div class="rounded-2 mb-3 d-flex justify-content-center position-relative"
+                    style="object-fit: contain;">
+                    <div class="position-absolute bottom-0 end-0">
+                        <form action="#">
+                            <input type="hidden" name="ID_of_favourite_Product" value="{{ product.products_id }}">
+                            <button type="submit"
+                                class="btn m-3 py-2 px-2 rounded-circle btn-danger d-flex justify-content-center align-items-center"
+                                style="height: 45px; width: 45px; padding-top: 0.7rem !important;"
+                                title="Add To Your Favourites">
+                                <img src="/static/svgs/heart.svg" alt="_favourite" class="img-fluid white-svg"
+                                    height="95%" width="95%">
+                            </button>
+                        </form>
+                    </div>
+                    <img class="rounded-2 img-fluid" src="/static/Uploaded_Products/{{ product.product_image }}">
+                </div>
+            </aside>
+            <main class="col-lg-6">
+                <div class="ps-lg-3">
+                    <h4 class="title text-info">
+                        {{ product.product_name }}
+                    </h4>
+                    <div class="d-flex flex-row my-3">
+                        <div class="text-warning mb-1 me-2 pen">
+                            <span class="rating-star">☆</span>
+                            <span class="rating-star">☆</span>
+                            <span class="rating-star">☆</span>
+                            <span class="rating-star">☆</span>
+                            <span class="rating-star">☆</span>
+                            <span class="ms-1">
+                                {{ product.product_rating }}
+                            </span>
+                        </div>
+                        <div class="vr mx-3 d-flex justify-content-center"></div>
+                        <span class="text-muted d-flex justify-content-center align-items-center"
+                            title="{{ product.product_totalOrders }} orders">
+                            <i class="bi bi-basket me-2"></i>
+                            {{ product.product_totalOrders }} orders</span>
+                        <div class="vr mx-3 d-flex justify-content-center"></div>
+                        <span class="text-success d-flex justify-content-center align-items-center">In stock</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="h5">₹ {{ product.product_price }}</span>
+                        <span class="text-muted">/per box</span>
+                    </div>
+
+                    <p>
+                        {{ product.product_desc_sm }}
+                    </p>
+
+                    <div class="row">
+                        <dt class="col-3">Type:</dt>
+                        <dd class="col-9">{{ product.product_category }}</dd>
+
+                        <dt class="col-3">Flavour:</dt>
+                        <dd class="col-9">{{ product.product_flavour }}</dd>
+
+                        <dt class="col-3">Origin:</dt>
+                        <dd class="col-9">{{ product.product_origin }}</dd>
+
+                        <dt class="col-3">Brand:</dt>
+                        <dd class="col-9">{{ product.product_manufacturer }}</dd>
+                    </div>
+
+                    <hr>
+
+                    <div class="row mb-4">
+                        <div class="col-md-4 col-6">
+                            <label class="mb-2">Size</label>
+                            <select class="form-select border border-secondary bg-dark" style="height: 35px;"
+                                id="icecreampack">
+                                <option>Small Box</option>
+                                <option>Medium Box</option>
+                                <option>Large Box</option>
+                            </select>
+                        </div>
+                        <!-- col.// -->
+                        <div class="col-md-4 col-6 mb-3">
+                            <label class="mb-2 d-block">Quantity</label>
+                            <div class="input-group mb-3" style="width: 170px;">
+                                <button class="btn btn-white border border-secondary px-3 text-light disabled"
+                                    type="button" id="button-addon1" data-mdb-ripple-color="dark" title="Remove 1">
+                                    -
+                                </button>
+                                <input type="text"
+                                    class="form-control text-center border border-secondary bg-dark text-light"
+                                    value="1" aria-label="Example text with button addon"
+                                    aria-describedby="button-addon1" id="number_of_product" min="1">
+                                <button class="btn btn-white border border-secondary px-3 text-light" type="button"
+                                    id="button-addon2" data-mdb-ripple-color="dark" title="Add 1 more">
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <form action="/retail/checkoutThis/icecream/" method="post" class="me-3" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="forwhat" value="ToCheckout">
+                            <input type="hidden" name="buynow_product_Pack" id="buynow_product_Pack" value="Small Box">
+                            <input type="hidden" name="buynow_product_Quantity" id="buynow_product_Quantity" value="1">
+                            <input type="hidden" name="buynow_product_Id" value="{{ product.products_id }}">
+                            <button class="btn btn-warning shadow-0 me-3"> Buy now </button>
+                        </form>
+                        <form action="/cart/add-cart/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="cart_product_Pack" id="cart_product_Pack" value="Small Box">
+                            <input type="hidden" name="cart_product_Quantity" id="cart_product_Quantity" value="1">
+                            <input type="hidden" name="cart_product_Id" value="{{ product.products_id }}">
+                            <button class="btn btn-primary shadow-0">
+                                <i class="bi bi-cart-plus me-2"></i>
+                                Add to cart </button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</section>
+
+<!-- Content -->
+
+<section class="border-top py-4">
+    <div class="container">
+        <div class="row gx-4">
+            <div class="col-lg-8 mb-4">
+                <div class="border rounded-2 px-3 py-2">
+                    <!-- Pills navs -->
+                    <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                        <li class="nav-item d-flex" role="presentation">
+                            <a class="nav-link d-flex align-items-center justify-content-center w-100 active"
+                                id="ex1-tab-1" data-bs-toggle="pill" href="#ex1-pills-1" role="tab"
+                                aria-controls="ex1-pills-1" aria-selected="true">Why Special</a>
+                        </li>
+                        <li class="nav-item d-flex" role="presentation">
+                            <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-2"
+                                data-bs-toggle="pill" href="#ex1-pills-2" role="tab" aria-controls="ex1-pills-2"
+                                aria-selected="false" tabindex="-1">Icecream info</a>
+                        </li>
+                        <li class="nav-item d-flex" role="presentation">
+                            <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-3"
+                                data-bs-toggle="pill" href="#ex1-pills-3" role="tab" aria-controls="ex1-pills-3"
+                                aria-selected="false" tabindex="-1">Testimonials</a>
+                        </li>
+                        <li class="nav-item d-flex" role="presentation">
+                            <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-4"
+                                data-bs-toggle="pill" href="#ex1-pills-4" role="tab" aria-controls="ex1-pills-4"
+                                aria-selected="false" tabindex="-1">Seller profile</a>
+                        </li>
+                    </ul>
+                    <!-- Pills navs -->
+
+                    <!-- Pills content -->
+                    <div class="tab-content" id="ex1-content">
+                        <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel"
+                            aria-labelledby="ex1-tab-1">
+                            <p>
+                                {{ product.product_desc_sm }}
+                            </p>
+                            <div class="row mb-2">
+                                <div class="col-12 col-md-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li><i class="fas fa-check text-success me-2"></i>Some great feature name here
+                                        </li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Lorem ipsum dolor sit amet,
+                                            consectetur</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Duis aute irure dolor in
+                                            reprehenderit</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Optical heart sensor</li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-md-6 mb-0">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Easy fast and ver good</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Some great feature name here
+                                        </li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Modern style and design</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <table class="table border mt-3 mb-2">
+                                <tbody>
+                                    <tr>
+                                        <th class="py-2">Seller:</th>
+                                        <td class="py-2">{{ product.product_seller }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="py-2">Date In Sale:</th>
+                                        <td class="py-2">{{ product.product_dateAdded }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="py-2">Total Orders for The Product:</th>
+                                        <td class="py-2">{{ product.product_totalOrders }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+                            {{ product.product_desc_lg | safe }}
+                        </div>
+                        <div class="tab-pane fade mb-2" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    Message from Ravi
+                                </div>
+                                <div class="card-body">
+                                    <blockquote class="blockquote mb-0">
+                                        <p>
+                                            I tried {{ product.product_name }} for the first time and I was blown away.
+                                            It was the
+                                            best dessert
+                                            I ever had. The {{ product.product_flavour }} was so rich and creamy, the
+                                            cake was so moist and
+                                            fluffy, and
+                                            the ice cream was so smooth and cool. It was a perfect combination of
+                                            flavors and
+                                            textures. I highly recommend it to anyone who loves chocolate.
+                                        </p>
+                                        <footer class="blockquote-footer">
+                                            <cite title="Source Title">Ravi Singhania</cite>
+                                            from Mumbai
+                                        </footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade mb-2" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
+                            Some other tab content or sample information now <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+                            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut
+                            aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                            sunt in culpa qui
+                            officia deserunt mollit anim id est laborum.
+                        </div>
+                    </div>
+                    <!-- Pills content -->
+
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="px-0 border rounded-2 shadow-0">
+                    <div class="card">
+                        <div class="card-body pb-1">
+                            <h5 class="card-title border-bottom pb-2 mb-4">Similar items</h5>
+
+                            {% for similarIce in similarIcecreamscat %}
+                            <a href="/stock/products/{{ similarIce.product_slug }}" class=" text-decoration-none">
+                                <div class="d-flex" style="margin-bottom: 10px;">
+                                    <img src="/static/Uploaded_Products/{{ similarIce.product_image }}"
+                                        style="min-width: 96px; height: 96px;" class="img-md img-thumbnail">
+                                    <div class="info text-muted ms-3 d-flex flex-column justify-content-between w100p">
+                                        {{ similarIce.product_name }}
+                                        <br>
+                                        <strong class="text-dark text-muted text-end"
+                                            style="margin-bottom: 7px; margin-right: 35px;">
+                                            ₹ {{ similarIce.product_price }}</strong>
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+
+                            {% for similarIce in similarIcecreamsfla %}
+                            <a href="/stock/products/{{ similarIce.product_slug }}" class=" text-decoration-none">
+                                <div class="d-flex" style="margin-bottom: 10px;">
+                                    <img src="/static/Uploaded_Products/{{ similarIce.product_image }}"
+                                        style="min-width: 96px; height: 96px;" class="img-md img-thumbnail">
+                                    <div class="info text-muted ms-3 d-flex flex-column justify-content-between w100p">
+                                        {{ similarIce.product_name }}
+                                        <br>
+                                        <strong class="text-dark text-muted text-end"
+                                            style="margin-bottom: 7px; margin-right: 35px;">
+                                            ₹ {{ similarIce.product_price }}</strong>
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- comments -->
+
+
+<section class="container-fluid p-0">
+    <!-- differentiator line -->
+    <div class="container-fluid p-0 d-flex justify-content-center align-items-center my-5 mx-0">
+        <div class="row m-0" style="width: 100%;">
+            <div class="col-3 d-flex justify-content-center align-items-center">
+                <h2 class="text-capitalize">Comments</h2>
+            </div>
+            <div class="col-9 d-flex justify-content-center align-items-center">
+                <div class="container-fluid border"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4 mb-2 px-4">
+
+        <!-- differentiator line -->
+        <div class="container-fluid p-0 d-flex justify-content-center align-items-center my-5 mx-0">
+            <div class="row m-0" style="width: 100%;">
+                <div class="col-5 d-flex justify-content-center align-items-center">
+                    <h4 class="text-capitalize text-success">Your comment On this Icecream</h4>
+                </div>
+                <div class="col-7 d-flex justify-content-center align-items-center">
+                    <div class="container-fluid border border-success"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Post your comment -->
+
+        <div class="card mb-4 shadow-2 border-success" style="min-height: 220px;">
+            <!-- User's Form for comment -->
+            <form action="/stock/products/productcomment/" method="post">
+                <div class="card-body">
+                    <textarea name="productComment" class="form-control bg-dark scroll-access"
+                        style="height: 141px; resize: none;" placeholder="Type your review here..."></textarea>
+                    {% csrf_token %}
+                    <input type="hidden" name="Comment_target_initilizer" value="">
+                    <input type="hidden" name="product-identity-digit" value="{{ product.products_id }}">
+                </div>
+                <div class="card-footer p-0 px-4 d-flex justify-content-center flex-column" style="height: 45px;">
+                    <div class="row m-0 p-0">
+                        <div class="col-10"></div>
+                        <div class="col-2 d-flex justify-content-center align-items-center">
+                            <button type="submit" class="btn btn-sm btn-success rounded-pill d-flex align-items-center"
+                                title="Reply">
+                                <span class="mx-3">Post
+                                    <ion-icon name="send" class="ms-2" style="transform: translateY(2px);"></ion-icon>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+
+
+        <!-- differentiator line for public comments -->
+        <div class="container-fluid p-0 d-flex justify-content-center align-items-center my-5 mx-0">
+            <div class="row m-0" style="width: 100%;">
+                <div class="col-5 d-flex justify-content-center align-items-center">
+                    <h4 class="text-capitalize text-warning pen">
+                        People Reviews On this Icecream ({{ comments.count }})
+                    </h4>
+                </div>
+                <div class="col-7 d-flex justify-content-center align-items-center">
+                    <div class="container-fluid border border-warning"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- commentcards -->
+
+        {% for comment in comments %}
+        <div class="mb-4">
+            <div class="card shadow-2 transition-5" style="min-height: 220px;" id="Cardis{{ comment.sno }}">
+                <div class="container-fluid border-bottom d-flex align-items-center p-0 px-2" style="height: 50px;">
+                    <div class="rounded-circle me-2 overflow-hidden" style="height: 40px; width: 40px;">
+                        <img src="/static/Uploaded_Products/{{ comment.user.additionalusercredentials.Avatar }}" alt=""
+                            class="img-fluid" height="100%" width="100%">
+                    </div>
+                    <div class="vr" style="margin-right: 13px !important;"></div>
+                    <div class="container-fluid p-0 d-flex flex-column justify-content-start m-0"
+                        style="height: 100%; width: fit-content; padding-top: 3px !important;">
+                        <h6 class="p-0 m-0 text-start pen">{{ comment.user.username }}</h6>
+                        <p class="p-0 m-0 text-start pen" style="font-size: 13px;">
+                            {{ comment.Productcomment_datetime_stamp }}
+                        </p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="col-6">
+
+                        {{ comment.Productcomment }}
+
+                    </div>
+                </div>
+                <div class="card-footer p-0 px-4 d-flex justify-content-center flex-column" style="height: 60px;">
+                    <div class="row m-0 p-0">
+                        <div class="col-2 d-flex justify-content-evenly align-items-center">
+                            <form action="/stock/products/{{ product.product_slug }}/" style="max-height: 60px;"
+                                method="post">
+                                {% csrf_token %}
+                                <input type="hidden" class="likeDislikeComment" name="commentLike"
+                                    value="{{ comment.sno }}">
+                                <input type="hidden" name="actionis" value="like">
+                                <input type="hidden" name="prodictis" value="{{ product.products_id }}">
+                                <button title="like"
+                                    class="btn rounded-circle text-light d-flex justify-content-center align-items-center"
+                                    style="height: 30px; width: 30px; transform: translateY(3px);"
+                                    thisisthetgtcomment="{{ comment.sno }}">
+                                    {% for like in likedComment|get_val:comment.sno %}
+                                    {% if like %}
+                                    {{ like.icon|safe }}
+                                    {% endif %}
+                                    {% endfor %}
+                                    <i class="bi bi-hand-thumbs-up position-absolute" style="opacity: 0.5;"></i>
+                                </button>
+                                <label style="font-size: 13px;">
+                                    (<span id="likes{{ comment.sno }}">{{comment.Likes}}</span>)Like
+                                </label>
+                            </form>
+                            <form action="/stock/products/{{ product.product_slug }}/" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" class="likeDislikeComment" name="commentDislike"
+                                    value="{{ comment.sno }}">
+                                <input type="hidden" name="actionis" value="dislike">
+                                <input type="hidden" name="prodictis" value="{{ product.products_id }}">
+                                <button title="dislike"
+                                    class="btn rounded-circle text-light d-flex justify-content-center align-items-center"
+                                    style="height: 30px; width: 30px; transform: translateY(3px) translateX(8px);"
+                                    thisisthetgtcomment="{{ comment.sno }}">
+                                    {% for dislike in dislikedComment|get_val:comment.sno %}
+                                    {% if dislike %}
+                                    {{ dislike.icon|safe }}
+                                    {% endif %}
+                                    {% endfor %}
+                                    <i class="bi bi-hand-thumbs-down position-absolute" style="opacity: 0.5;"></i>
+                                </button>
+                                <label style="font-size: 13px;">
+                                    Dislike
+                                </label>
+                            </form>
+                        </div>
+                        <div class="col-9"></div>
+                        <div class="col-1 d-flex justify-content-center align-items-center">
+                            <button type="button" class="btn btn-sm btn-warning rounded-pill px-2" title="Reply"
+                                data-bs-toggle="collapse" data-bs-target="#all_Replies{{ comment.sno }}"
+                                aria-expanded="false" aria-controls="all_Replies{{ comment.sno }}"
+                                targetCard="Cardis{{ comment.sno }}" onclick="replyCollapser(this)">Reply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Reply Stuff -->
+            <div class="collapse container border transition-5 rounded-2" id="all_Replies{{ comment.sno }}">
+                <!-- Working on reply input -->
+                <div class="row m-0 p-0 border-bottom mb-3 p-3">
+                    <div class="col-12">
+                        <h6>Post Your Reply</h6>
+                        <form action="/stock/products/productcomment/" method="post" id="ReplyFor{{ comment.sno }}">
+                            {% csrf_token %}
+                            <input type="hidden" name="parentSno" value="{{ comment.sno }}" />
+                            <input type="hidden" name="product-identity-digit" value="{{ product.products_id }}">
+                            <div class="container-fluid p-2">
+                                <textarea name="replycomment" class="bg-dark w100p form-control"
+                                    placeholder="Your reply here..." style="height: 100px; resize: none;"></textarea>
+                            </div>
+                            <div class="container-fluid p-2">
+                                <button type="submit" class="btn btn-sm btn-success float-end">Post Reply</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Working on reply card -->
+                <div class="container-fluid p-0">
+                    {% for reply in replies|get_val:comment.sno %}
+                    <div class="row m-0 p-0 mb-3 p-3">
+                        <div class="col-2"></div>
+                        <div class="col-10 border">
+                            <div class="container-fluid px-1">
+                                <!-- header -->
+                                <div class="d-flex align-items-center border-bottom" style="height: 50px;">
+                                    <img src="/static/Uploaded_Products/{{ reply.user.additionalusercredentials.Avatar }}" alt="replyer" height="40px" width="40px"
+                                        class="img-fluid rounded-circle">
+                                    <div class="container-fluid">
+                                        <p class="mb-0">
+                                            {{ reply.user }}
+                                            <span class="badge ms-2 px-1 py-1 bg-info-subtle border border-info">Replied</span> 
+                                        </p>
+                                        <p class="mb-0" style="font-size: 12px;">{{ reply.Productcomment_datetime_stamp|naturaltime }}</p>
+                                    </div>
+                                </div>
+                                <!-- reply -->
+                                <div class="container-fluid p-2">
+                                    <p>
+                                        {{ reply.Productcomment }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock body %}
+{% block js %}
+<!-- script for integrating button '+' and '-' -->
+<script>
+    let input_product = document.querySelector('#number_of_product');
+    let minusButton = document.querySelector('#button-addon1');
+    let plusButton = document.querySelector('#button-addon2');
+
+    minusButton.addEventListener('click', () => {
+        if (input_product.value === '2') {
+            minusButton.classList.add('disabled')
+        }
+        if (input_product.value !== '') {
+            input_product.value = parseInt(input_product.value) - 1;
+        }
+    });
+
+    plusButton.addEventListener('click', () => {
+        minusButton.classList.remove('disabled')
+        if (input_product.value !== '') {
+            input_product.value = parseInt(input_product.value) + 1;
+        }
+    });
+
+    // script for forms of add to cart and buy now
+
+    document.getElementById("button-addon1").addEventListener("click", function () {
+        document.getElementById("buynow_product_Quantity").value = document.getElementById("number_of_product").value;
+        document.getElementById("cart_product_Quantity").value = document.getElementById("number_of_product").value;
+    });
+
+    document.getElementById("button-addon2").addEventListener("click", function () {
+        document.getElementById("buynow_product_Quantity").value = document.getElementById("number_of_product").value;
+        document.getElementById("cart_product_Quantity").value = document.getElementById("number_of_product").value;
+    });
+
+    document.getElementById("icecreampack").addEventListener("change", function () {
+        document.getElementById("buynow_product_Pack").value = this.value;
+        document.getElementById("cart_product_Pack").value = this.value;
+    });
+</script>
+
+<!-- Script for replies -->
+<script>
+    function replyCollapser(e) {
+        var tc = e.getAttributeNode("targetCard").value;
+        var tcol = e.getAttributeNode("data-bs-target").value;
+        var Cardis = document.getElementById(tc);
+        var Collapseis = document.querySelector(tcol);
+        Cardis.classList.toggle("showreply");
+    }
+</script>
+
+{% endblock js %}
+
+
+<!-- 
+    netsh wlan show profiles
+    netsh wlan show profile name="NETWORK NAME" key=clear
+-->

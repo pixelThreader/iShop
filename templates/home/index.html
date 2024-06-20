@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block body %}
+
+<!-- Carousel -->
+
+<div class="container-fluid p-0 mb-5 mt-2">
+    <div id="iShopCarousel" class="carousel slide carousel-fade rounded-3 overflow-hidden" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#iShopCarousel" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#iShopCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#iShopCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#iShopCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="2500">
+                <!-- unsplash api : "https://source.unsplash.com/1000x350?icecream" -->
+                <img src="/static/iceCreams/carousel/vanilla-car.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block rounded-pill" style="background: rgba(0, 0, 0, 0.46);">
+                    <h5>The "Vanilla-de-Crispo"</h5>
+                    <p class="text-info">This is the iceCream we're known for...Most orderd in India</p>
+                    <div class="position-absolute" style="right: 30px; top: 40%;">
+                        <a href="/stock/products/vanilla-de-crispoo" class="btn btn-success rounded-pill"
+                            title="Order Now">
+                            <img src="/static/svgs/cart-plus.svg" alt="Order Now" class="img-fluid" height="30px"
+                                width="30px"
+                                style="filter: invert(68%) sepia(97%) saturate(350%) hue-rotate(133deg) brightness(93%) contrast(98%);">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" data-bs-interval="2500">
+                <img src="/static/iceCreams/carousel/ice buscuits-car.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block rounded-pill" style="background: rgba(0, 0, 0, 0.52);">
+                    <h5>The "ice-Buscuits-Malena"</h5>
+                    <p class="text-info">This is one the top deserts in Australia</p>
+                    <div class="position-absolute" style="right: 30px; top: 40%;">
+                        <a href="/stock/products/ice-buscuits-malena" class="btn btn-success rounded-pill"
+                            title="Order Now">
+                            <img src="/static/svgs/cart-plus.svg" alt="Order Now" class="img-fluid" height="30px"
+                                width="30px"
+                                style="filter: invert(68%) sepia(97%) saturate(350%) hue-rotate(133deg) brightness(93%) contrast(98%);">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" data-bs-interval="2500">
+                <img src="/static/iceCreams/carousel/iceChocoMalte-car.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block rounded-pill" style="background: rgba(0, 0, 0, 0.46);">
+                    <h5>The "Choco-Malte"</h5>
+                    <p class="text-info">This is called The Chocolate Of Heaven...</p>
+                    <div class="position-absolute" style="right: 30px; top: 40%;">
+                        <a href="/stock/products/choco-malte" class="btn btn-success rounded-pill" title="Order Now">
+                            <img src="/static/svgs/cart-plus.svg" alt="Order Now" class="img-fluid" height="30px"
+                                width="30px"
+                                style="filter: invert(68%) sepia(97%) saturate(350%) hue-rotate(133deg) brightness(93%) contrast(98%);">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" data-bs-interval="2500">
+                <img src="/static/iceCreams/carousel/chocolate-car.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block rounded-pill" style="background: rgba(0, 0, 0, 0.46);">
+                    <h5>The "Choco-desusa-Crispō"</h5>
+                    <p class="text-info">This is ice Chocolate Made in The Master Chef by ""</p>
+                    <div class="position-absolute" style="right: 30px; top: 40%;">
+                        <a href="/stock/products/choco-desusa-crispoo" class="btn btn-success rounded-pill"
+                            title="Order Now">
+                            <img src="/static/svgs/cart-plus.svg" alt="Order Now" class="img-fluid" height="30px"
+                                width="30px"
+                                style="filter: invert(68%) sepia(97%) saturate(350%) hue-rotate(133deg) brightness(93%) contrast(98%);">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#iShopCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#iShopCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+
+<!-- #SECTION 1 :- Top Products -->
+
+<section class="container-fluid p-0 m-0">
+    <!-- Differentiator with title -->
+    <div class="container-fluid p-0 d-flex justify-content-center align-items-center mb-5 mx-0">
+        <div class="row m-0" style="width: 100%;">
+            <div class="col-4 d-flex justify-content-center align-items-center">
+                <div class="container-fluid border"></div>
+            </div>
+            <div class="col-4 d-flex justify-content-center align-items-center">
+                <h2 class="text-capitalize">Top Orders Of The Week</h2>
+            </div>
+            <div class="col-4 d-flex justify-content-center align-items-center">
+                <div class="container-fluid border"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards For Popular Products use Of Some Filters in Future -->
+
+    <div class="container">
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            {% for besticecream in TopProducts %}
+
+            <div class="col">
+                <div class="card shadow-sm border-info-subtle overflow-hidden">
+                    <img src="/static/Uploaded_Products/{{ besticecream.product_image }}" alt="">
+                    <div class="card-body">
+                        <h5 class="text-center">{{ besticecream.product_name }}</h5>
+                        <hr class="my-2">
+                        <p class="card-text">{{ besticecream.product_desc_sm | truncatechars:200 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a role="button" href="/stock/products/{{ besticecream.product_slug }}"
+                                class="btn btn-sm btn-outline-success" title="Order Now">Order
+                                now</a>
+                                <form action="/cart/add-cart/" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="cart_product_Pack" id="cart_product_Pack"
+                                        value="Small Box">
+                                    <input type="hidden" name="cart_product_Quantity" id="cart_product_Quantity"
+                                        value="1">
+                                    <input type="hidden" name="cart_product_Id" value="{{ besticecream.products_id }}">
+                                    <input type="hidden" name="fromHere" value="homepage">
+                                    <button type="submit" class="btn btn-sm btn-outline-info border-info-subtle"
+                                        title="Add To Cart" style="border-top-left-radius: 0;border-bottom-left-radius: 0;">
+                                        <img src="/static/svgs/cart-plus.svg" alt="Order Now" class="img-fluid"
+                                            height="20px" width="20px"
+                                            style="filter: invert(45%) sepia(88%) saturate(1429%) hue-rotate(1deg) brightness(103%) contrast(104%);">
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+<!-- #SECTION 2 :- Top Reviews -->
+
+<section class="container-fluid p-0 m-0">
+    <!-- Differentiator with title -->
+    <div class="container-fluid p-0 d-flex justify-content-center align-items-center my-5 mx-0">
+        <div class="row m-0" style="width: 100%;">
+            <div class="col-3 d-flex justify-content-center align-items-center">
+                <div class="container-fluid border"></div>
+            </div>
+            <div class="col-6 d-flex justify-content-center align-items-center">
+                <h2 class="text-capitalize">Top Reviews By Our Costomers</h2>
+            </div>
+            <div class="col-3 d-flex justify-content-center align-items-center">
+                <div class="container-fluid border"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards Of Top Reviews -->
+
+    <div class="container d-flex justify-content-between">
+        <!-- top 2 -->
+
+        <div class="card">
+            <div class="card-header">
+                <div class="row p-0 m-0" style="height: 100%;">
+                    <div class="col-1 d-flex justify-content-center align-items-center">
+                        <img src="/static/user/user1.png" class="rounded-circle" alt="" height="40px" width="40px">
+                    </div>
+                    <div class="col-1 d-flex justify-content-start align-items-center">
+                        <div class="vr"></div>
+                    </div>
+                    <div class="col-10 text-capitalize d-flex flex-column justify-content-center">
+                        User_1
+                        <p style="font-size: 13px;">20 january, 2023</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0" style="font-size: 16px;">
+                    <p>A well-known quote, contained in a blockquote element.</p>
+                </blockquote>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="row p-0 m-0" style="height: 100%;">
+                    <div class="col-1 d-flex justify-content-center align-items-center">
+                        <img src="/static/user/user1.png" class="rounded-circle" alt="" height="40px" width="40px">
+                    </div>
+                    <div class="col-1 d-flex justify-content-start align-items-center">
+                        <div class="vr"></div>
+                    </div>
+                    <div class="col-10 text-capitalize d-flex flex-column justify-content-center">
+                        User_2
+                        <p style="font-size: 13px;">20 january, 2023</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0" style="font-size: 16px;">
+                    <p>A well-known quote, contained in a blockquote element.</p>
+                </blockquote>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- #SECTION 3 :- Some of our Products -->
+
+<section class="container-fluid p-0 m-0">
+
+    <div class="container-fluid p-0 d-flex justify-content-center align-items-center my-5 mx-0">
+        <!-- Differentiator with title -->
+        <div class="row m-0" style="width: 100%;">
+            <div class="col-3 d-flex justify-content-center align-items-center">
+                <div class="container-fluid border"></div>
+            </div>
+            <div class="col-6 d-flex justify-content-center align-items-center">
+                <h2 class="text-capitalize">Our Range Of IceCreams</h2>
+            </div>
+            <div class="col-3 d-flex justify-content-center align-items-center">
+                <div class="container-fluid border"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- some icecreams Avalaible -->
+    <div class="container-fluid">
+
+        <div class="container-fluid d-flex justify-content-around flex-wrap">
+
+            {% for someofouricecreams in SomeProduct %}
+            <div class="card mb-3" style="width: 600px; height: 301px;">
+                <div class="row g-0">
+                    <div class="col-md-6 p-0">
+                        <img src="/static/Uploaded_Products/{{ someofouricecreams.product_image }}"
+                            class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ someofouricecreams.product_name }}</h5>
+                            <hr>
+                            <p class="card-text" style="height: 143px;">
+                                {{ someofouricecreams.product_desc_sm | truncatechars:200 }}
+                            </p>
+                            <hr>
+                            <div class="container-fluid d-flex justify-content-end align-items-center">
+                                <div class="btn-group">
+                                    <a role="button" href="/stock/products/{{ someofouricecreams.product_slug }}"
+                                        class="btn btn-sm btn-outline-success border border-primary"
+                                        title="Order Now">Order
+                                        now</a>
+                                    <a role="button" href="#" class="btn btn-sm btn-outline-info border border-primary"
+                                        title="Add To Cart">
+                                        <img src="/static/svgs/cart-plus.svg" alt="Order Now" class="img-fluid"
+                                            height="20px" width="20px"
+                                            style="filter: invert(45%) sepia(88%) saturate(1429%) hue-rotate(1deg) brightness(103%) contrast(104%);">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+
+        <div class="container">
+            <hr>
+            <a href="/stock/products" class="btn btn-primary float-end">View All Products</a>
+        </div>
+
+    </div>
+    
+</section>
+<div class="mt-5" style="height: 1px; visibility: hidden;">Bottom Margin For Better UI. &copy; iShop</div>
+
+{% endblock body %}

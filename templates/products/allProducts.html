@@ -1,0 +1,439 @@
+{% extends 'base.html' %}
+
+{% block title %}Products{% endblock title %}
+
+{% block productsActive %}btn-secondary disabled{% endblock productsActive %}
+
+{% block stylesheet %}
+
+<style>
+    .ratings i {
+        font-size: 16px;
+        color: red
+    }
+
+    .strike-text {
+        color: red;
+        text-decoration: line-through
+    }
+
+    .product-image {
+        width: 100%
+    }
+
+    .dot {
+        height: 7px;
+        width: 7px;
+        margin-left: 6px;
+        margin-right: 6px;
+        margin-top: 3px;
+        background-color: blue;
+        border-radius: 50%;
+        display: inline-block
+    }
+
+    .spec-1 {
+        color: #938787;
+        font-size: 15px
+    }
+
+    h5 {
+        font-weight: 400
+    }
+
+    .para {
+        font-size: 16px
+    }
+
+    .rating-star {
+        font-size: 20px;
+        color: gold;
+    }
+
+    @media (max-width:767px) {
+        .responsive_all_price {
+            padding-top: 32px;
+            padding-bottom: 20px;
+        }
+    }
+</style>
+
+{% endblock stylesheet %}
+
+{% block body %}
+
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="x-circle-fill" viewBox="0 0 16 16" fill="#ccc">
+        <path
+            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+    </symbol>
+</svg>
+
+<main>
+
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light"><span style="color: orangered; font-weight: 500;"><span
+                            style="color: orange;">i</span>Shop</span> IceCream Container</h1>
+                <p class="lead text-body-secondary">Something special about the collection of our wide range
+                    of icecreams below—its contents,
+                    we make sure the taste, flavour, quality and most importantly feelings of our icecreams should be
+                    proper. Our
+                    icecreams made totally with Love which make it delicius and sweet.</p>
+                <p class="m-0">Enjoy Our IceCreams!</p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="mt-4">
+
+    <!-- Features for this section -->
+    <section class="container-fluid px-4 m-0 position-relative">
+        <div class="row p-0 m-0">
+
+            <!-- All Filter Badges -->
+            <div class="col-10 border-start border-end px-2 position-relative">
+                <span class="position-absolute badge bg-info-subtle border"
+                    style="transform: translateY(-30px) translateX(10px); font-size: small;">
+                    Applied {<span id="no_filters_applied"></span>} Filters
+                </span>
+
+                <!-- styles for filter container -->
+                <style>
+                    #f0001 {
+                        overflow: auto;
+                        overflow-y: hidden;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    #f0001::-webkit-scrollbar {
+                        display: none;
+                    }
+                </style>
+                <!-- styles for filter badge -->
+                <style>
+                    #f1001 {
+                        width: fit-content;
+                    }
+                </style>
+
+                <div class="container-fluid p-0" id="f0001">
+
+                    <!-- Filter Badge -->
+                    <span
+                        class="badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-pill me-2"
+                        id="f1001">
+                        <img class="rounded-circle me-1" width="24" height="24" src="/static/reviews/response.jpg"
+                            alt="">
+                        Primary
+                        <span class="vr mx-2"></span>
+                        <a href="#" class="dismissFilter">
+                            <svg class="bi" width="16" height="16">
+                                <use xlink:href="#x-circle-fill"></use>
+                            </svg>
+                        </a>
+                    </span>
+                    <span
+                        class="badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-pill me-2"
+                        id="f1001">
+                        <img class="rounded-circle me-1" width="24" height="24" src="/static/reviews/response.jpg"
+                            alt="">
+                        Primary
+                        <span class="vr mx-2"></span>
+                        <a href="#" class="dismissFilter">
+                            <svg class="bi" width="16" height="16">
+                                <use xlink:href="#x-circle-fill"></use>
+                            </svg>
+                        </a>
+                    </span>
+                    <span
+                        class="badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-pill me-2"
+                        id="f1001">
+                        <img class="rounded-circle me-1" width="24" height="24" src="/static/reviews/response.jpg"
+                            alt="">
+                        Primary
+                        <span class="vr mx-2"></span>
+                        <a href="#" class="dismissFilter">
+                            <svg class="bi" width="16" height="16">
+                                <use xlink:href="#x-circle-fill"></use>
+                            </svg>
+                        </a>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- filter button -->
+            <div class="col-2 d-flex justify-content-center">
+                <style>
+                    #t0002 {
+                        filter: invert(61%) sepia(93%) saturate(7491%) hue-rotate(214deg) brightness(104%) contrast(99%);
+                    }
+
+                    #t0001:hover #t0002 {
+                        filter: invert(1);
+                    }
+                </style>
+
+                <button type="button" id="t0001"
+                    class="btn btn-sm btn-outline-primary rounded-pill d-flex justify-content-around align-items-center px-3"
+                    data-bs-toggle="modal" data-bs-target="#exampleModalDefault" fdprocessedid="oe2k4o">
+                    <span class="me-1">Filters</span> <img src="/static/svgs/filter-circle-outline.svg" id="t0002"
+                        alt="filter" height="30px" width="30px">
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Filter Modal -->
+        <div class="modal fade" id="exampleModalDefault" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <label class="list-group-item d-flex"
+                                    style="border: none; height: 100%; cursor: pointer;">
+                                    <input class="form-check-input me-3" type="checkbox" value="" checked="">
+                                    <span>
+                                        First checkbox
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="list-group-item">
+                                <label class="list-group-item d-flex"
+                                    style="border: none; height: 100%; cursor: pointer;">
+                                    <input class="form-check-input me-3" type="checkbox" value="" checked="">
+                                    <span>
+                                        First checkbox
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="list-group-item">
+                                <label class="list-group-item d-flex"
+                                    style="border: none; height: 100%; cursor: pointer;">
+                                    <input class="form-check-input me-3" type="checkbox" value="" checked="">
+                                    <span>
+                                        First checkbox
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="list-group-item">
+                                <label class="list-group-item d-flex"
+                                    style="border: none; height: 100%; cursor: pointer;">
+                                    <input class="form-check-input me-3" type="checkbox" value="" checked="">
+                                    <span>
+                                        First checkbox
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="list-group-item">
+                                <label class="list-group-item d-flex"
+                                    style="border: none; height: 100%; cursor: pointer;">
+                                    <input class="form-check-input me-3" type="checkbox" value="" checked="">
+                                    <span>
+                                        First checkbox
+                                    </span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Apply Filters</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+    <hr class="mb-4">
+
+    <!-- section :- All products -->
+    <section class="container-fluid p-0 m-0">
+        <div class="container mt-5 mb-5">
+
+            {% if allProduct %}
+
+            {% for product in allProduct %}
+
+            <div class="d-flex justify-content-center row mt-3">
+                <div class="row p-2 bg-dark border rounded mt-2" style="border: 1px solid #a2ab50 !important;">
+                    <div class="col-md-3 mt-1">
+                        <img class="img-fluid img-responsive rounded product-image"
+                            src="/static/Uploaded_Products/{{ product.product_image }}">
+                    </div>
+                    <div class="col-md-6 mt-1">
+                        <h5>{{ product.product_name }}</h5>
+                        <hr class="my-1">
+                        <div class="d-flex flex-row align-items-center ratings">
+                            <span class="rating-star">&starf;</span>
+                            <span class="rating-star">&starf;</span>
+                            <span class="rating-star">&starf;</span>
+                            <span class="rating-star">☆</span>
+                            <span class="rating-star">☆</span>
+                            <span class="ms-3">
+                                {{ product.product_rating }}
+                            </span>
+                        </div>
+                        <div class="mt-1 mb-1 spec-1">
+                            <span>100% {{ product.product_flavour }}</span>
+                            <span class="dot"></span>
+                            <span>Delicuous</span>
+                            <span class="dot"></span>
+                            <span>Best {{ product.product_category }}<br></span>
+                        </div>
+                        <div class="mt-1 mb-1 spec-1">
+                            <span>Unique design</span>
+                            <span class="dot"></span>
+                            <span>Taste OF {{ product.product_origin }}</span>
+                        </div>
+                        <hr class="my-1">
+                        <p class="text-justify para mb-0 p-2" style="height: 115px;">
+                            {{ product.product_desc_sm }}
+                        </p>
+                    </div>
+                    <div
+                        class="d-flex flex-column justify-content-between align-content-center col-md-3 border-left mt-1 responsive_all_price">
+                        <div>
+                            <div class="d-flex flex-row align-items-start">
+                                <h4 class="mr-1">₹ {{ product.product_price }}</h4>
+                            </div>
+                            <h6 class="text-success">Free shipping</h6>
+                        </div>
+                        <div class="d-flex flex-column mt-4">
+                            <a href="{{ product.product_slug }}" class="btn btn-success btn-sm">Order Now</a>
+                            <form action="/cart/add-cart/" method="post" id="additionToCart{{ product.product_sno }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="cart_product_Pack" id="cart_product_Pack" value="Small Box">
+                                <input type="hidden" name="cart_product_Quantity" id="cart_product_Quantity" value="1">
+                                <input type="hidden" name="cart_product_Id" value="{{ product.products_id }}">
+                                <input type="hidden" name="fromHere" value="allproductspage">
+                                <button class="btn btn-outline-info btn-sm mt-2" type="submit" style="width: 100%;"
+                                    formistarget="additionToCart{{ product.product_sno }}" onclick="SubmitAsync(this)">
+                                    <i class="bi bi-cart-plus me-2"></i>
+                                    Add to Cart
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+            <hr class="mb-3">
+
+            <div class="container d-flex justify-content-end align-items-center" style="height: 90px;">
+
+                <nav id="pages_are">
+                    <ul class="pagination pagination-sm flex-wrap">
+                        <!-- Previus Page -->
+                        {% if data.has_previous %}
+                        <li class="page-item">
+                            <a href="?page={{ data.previous_page_number }}" indexIs="{{ data.previous_page_number }}" class="page-link" id="previous_page">Previous</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link">Previous</a>
+                        </li>
+                        {% endif %}
+            
+                        <input type="hidden" id="thisIsCurrently" value="{{ data.number }}">
+                        <span id="totalPageLinks" class="d-flex">
+                        </span>
+            
+                        <!-- Next Page -->
+                        {% if data.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ data.next_page_number }}">Next</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link">Next</a>
+                        </li>
+                        {% endif %}
+            
+            
+                    </ul>
+                </nav>
+                
+            </div>
+
+            {% else %}
+
+            <h6 class="text-center text-warninr">No Products Available</h6>
+
+            {% endif %}
+
+        </div>
+    </section>
+
+</main>
+
+
+
+{% endblock body %}
+
+{% block js %}
+
+<script>
+    // Get all the elements with class "dismissFilter"
+    const dismissButtons = document.querySelectorAll(".dismissFilter");
+
+    // Loop through each element and add a click event listener
+    dismissButtons.forEach(function (dismissButton) {
+        dismissButton.addEventListener("click", function () {
+            // When clicked, get the parent element (the badge) and remove it from the DOM
+            const parentBadge = dismissButton.parentNode;
+            parentBadge.parentNode.removeChild(parentBadge);
+            countFiltersApplied()
+        });
+    });
+    function countFiltersApplied() {
+        const container = document.getElementById('f0001');
+        const badges = container.querySelectorAll('span.badge');
+        const count = badges.length;
+        const span = document.getElementById('no_filters_applied');
+        span.textContent = count;
+    }
+    countFiltersApplied();
+</script>
+
+<script>
+
+    var pagecomming = {{ total_data }}/{{ DataPerPage }};
+
+    if (Math.round(pagecomming) == Math.floor(pagecomming)) {
+        pagecomming++;
+    }
+
+    for (let i = 1; i <= pagecomming; i++) {
+        $("#totalPageLinks").append(`
+            <li class="page-item" indexIs="${i}">
+                <a class="page-link rounded-0" href="?page=${i}">${i}</a>
+            </li>
+        `)
+    }
+    let curr_page = $('#thisIsCurrently').attr("value");
+
+    if (curr_page == 1) {
+        curr_page=0;
+    }
+    let targetpage =$('li[class="page-item"]').get(curr_page);
+    targetpage.classList.add("active")
+
+</script>
+
+{% endblock js %}

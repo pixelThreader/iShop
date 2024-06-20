@@ -1,0 +1,322 @@
+{% extends 'base-blank.html' %}
+
+{% block title %}
+Seller
+{% endblock %}
+
+{% block stylesheet %}
+
+<style>
+    .h100p {
+        height: 100%;
+    }
+
+    .h100 {
+        height: 100px;
+    }
+
+    .h150 {
+        height: 150px;
+    }
+
+    .h200 {
+        height: 200px;
+    }
+
+    .w100p {
+        width: 100%;
+    }
+
+    .pen {
+        cursor: default;
+    }
+
+    #quillHTML {
+        height: 200px;
+        width: 100%;
+    }
+
+    .ql-toolbar.ql-snow  {
+        border: 1px solid #495057 !important;
+    }
+
+    .ql-container.ql-snow { 
+        border: 1px solid #495057 !important;
+    }
+</style>
+
+<link rel="stylesheet" href="/static/css/quill.snow.css">
+
+{% endblock stylesheet %}
+
+{% block body %}
+
+<section class="d-flex container-fluid p-0 align-items-center flex-column h100p">
+
+    <h1 class="text-center my-3 mt-4 pen"> Sellers @ <span style="color: orangered; font-weight: 500;"><span
+                style="color: orange;">i</span>Shop</span></h1>
+
+    <hr class="w100p my-4">
+
+    <div class="container-fluid p-0 mt-3">
+
+        <!-- styles for form stuff -->
+        <style>
+            .badgeaction {
+                transform: translateY(-11px) translateX(45px);
+            }
+        </style>
+
+        <form action="/stock/upload-products/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container">
+                <!-- General details of icecream -->
+                <div class="container-fluid border border-primary-subtle px-0 py-4 rounded-2 position-relative">
+                    <span
+                        class="badge bg-primary-subtle border border-primary-subtle position-absolute top-0 start-0 badgeaction pen"
+                        title="This Section Covers Some General Details So That You Can Considerd As Our User.">General
+                        Details of Ice Cream</span>
+                    <div class="row w100p p-0 m-0">
+                        <div class="col-4">
+                            <label for="IceCreamPhoto" class="form-label" title="Photo Of the IceCream">Ice Cream
+                                Photo</label>
+                            <div class="input-group" title="Photo Of the IceCream">
+                                <div class="input-group mb-3">
+                                    <input type="file" class="form-control bg-dark" name="IceCreamPhoto"
+                                        id="IceCreamPhoto" title="Photo Of the IceCream" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <label for="icecreamName" class="form-label" title="IceCream Name">IceCream Name</label>
+                            <div class="input-group" title="IceCream Name">
+                                <span class="input-group-text pen">
+                                    <ion-icon name="ice-cream"></ion-icon>
+                                </span>
+                                <input type="text" name="icecreamName" id="icecreamName" class="form-control bg-dark"
+                                    title="Enter IceCream Name" placeholder="Icecream name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row w100p p-0 mx-0 my-3">
+                        <div class="col-8">
+                            <label for="iceCreamCategory" class="form-label"
+                                title="Category of Icecream">Category</label>
+                            <div class="input-group" title="Category of Icecream">
+                                <span class="input-group-text">
+                                    <ion-icon name="file-tray-stacked"></ion-icon>
+                                </span>
+                                <select class="form-select bg-dark" id="iceCreamCategory" name="iceCreamCategory"
+                                    title="Choose Category of Icecream" required>
+                                    <option value="-----" selected>-----</option>
+                                    <option value="Family">Family</option>
+                                    <option value="Tub">Tub</option>
+                                    <option value="Cup">Cup</option>
+                                    <option value="Cone">Cone</option>
+                                    <option value="Popsticle">Popsticle</option>
+                                    <option value="Chocolate">Chocolate</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label for="IceCreamPrice" class="form-label" title="Price Of the IceCream">Price</label>
+                            <div class="input-group" title="Price Of the IceCream">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">
+                                        <ion-icon name="pricetag"></ion-icon>
+                                    </span>
+                                    <input type="text" class="form-control bg-dark" name="IceCreamPrice"
+                                        id="IceCreamPrice" title="Price Of the IceCream" required>
+                                    <span class="input-group-text" title="Decimal place">
+                                        •
+                                    </span>
+                                    <input type="text" class="form-control bg-dark" name="IceCreamPriceDec"
+                                        id="IceCreamPrice" title="Price Of the IceCream" value="00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row w100p p-0 m-0">
+                        <div class="col-6">
+                            <label for="iceCreamFlavour" class="form-label" title="Flavour of Icecream">Flavour</label>
+                            <div class="input-group" title="Flavour of Icecream">
+                                <span class="input-group-text">
+                                    <ion-icon name="water"></ion-icon>
+                                </span>
+                                <select class="form-select bg-dark" id="iceCreamFlavour" name="iceCreamFlavour"
+                                    title="Choose Flavour of Icecream" required>
+                                    <option value="-----" selected>-----</option>
+                                    <option value="Butterscotch">Butterscotch</option>
+                                    <option value="Black Berry">Black Berry</option>
+                                    <option value="Guava">Guava</option>
+                                    <option value="Dark Chocolate">Dark Chocolate</option>
+                                    <option value="Chocolate">Chocolate</option>
+                                    <option value="Vanilla">Vanilla</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- IceCreamMaker -->
+                        <div class="col-6">
+                            <label for="IceCreamMaker" class="form-label" title="IceCream Company Name">IceCream Company
+                                Name</label>
+                            <div class="input-group" title="IceCream Company Name">
+                                <span class="input-group-text pen">
+                                    <ion-icon name="business-sharp"></ion-icon>
+                                </span>
+                                <input type="text" name="IceCreamMaker" id="IceCreamMaker" class="form-control bg-dark"
+                                    title="Enter IceCream Company Name" placeholder="Icecream Company" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Descriptions -->
+                <div class="container-fluid border border-info-subtle px-0 py-4 rounded-2 position-relative my-5">
+                    <span
+                        class="badge bg-info-subtle border border-info-subtle position-absolute top-0 start-0 badgeaction pen"
+                        title="This Section Is For Contact Details So That We'll Contact To You.">Description of
+                        Icecream</span>
+                    <div class="row w100p p-0 mx-0 my-3">
+                        <div class="col-12">
+                            <label for="IceCreamMiniDesc" class="form-label"
+                                title="Small Description About Icecream">Mini Disctiption (300 chars
+                                Left)</label>
+                            <div class="input-group">
+                                <span class="input-group-text" title="Small Description">
+                                    <ion-icon name="chatbox"></ion-icon>
+                                </span>
+                                <textarea class="form-control bg-dark" style="height: 86px; resize: none;"
+                                    id="IceCreamMiniDesc" name="IceCreamMiniDesc" maxlength="300"
+                                    title="Enter Small Description" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row w100p p-0 mx-0 my-3">
+                        <div class="col-12">
+                            <label for="IceCreamLgDesc" class="form-label"
+                                title="Brief Description About Icecream">Brief Disctiption
+                                (unlimited)</label>
+                            <div class="input-group">
+                                <span class="input-group-text" title="Brief Description">
+                                    <ion-icon name="chatbubble-ellipses"></ion-icon>
+                                </span>
+                                <div class="d-flex flex-column" style="width: 96%;">
+                                    <div id="iceLgdesc"></div>
+                                </div>
+                                <input type="hidden" name="IceCreamLgDesc" id="IceCreamLgDesc">
+                                <!-- <textarea class="form-control bg-dark scroll-access" style="min-height: 150px;"
+                                    title="Enter Brief Description" name="IceCreamLgDesc"
+                                    id="IceCreamLgDesc" required></textarea> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Seller details -->
+                <div class="container-fluid border border-warning-subtle px-0 py-4 rounded-2 position-relative my-3">
+                    <span
+                        class="badge bg-warning-subtle border border-warning-subtle position-absolute top-0 start-0 badgeaction pen"
+                        title="This Section Is For Location Details. We'll Use is For Shipping Porpuses Only">Seller
+                        Details</span>
+                    <div class="row w100p p-0 m-0">
+                        <div class="col-6">
+                            <label for="iceCreamCountry" class="form-label" title="Country of Icecream">Country Of
+                                Origin Of Icecream</label>
+                            <div class="input-group" title="Country of Icecream">
+                                <span class="input-group-text"><ion-icon name="earth"></ion-icon></span>
+                                <input type="text" class="form-control bg-dark" id="iceCreamCountry"
+                                    name="iceCreamCountry" title="Enter Name of Country of Icecream" required>
+                            </div>
+                        </div>
+                        <div class="col-6 position-relative">
+                            <label for="iceCreamSellerName" class="form-label" title="Seller's Name">Name Of
+                                Seller</label>
+                            <div class="input-group" title="Seller's Name">
+                                <span class="input-group-text">
+                                    <ion-icon name="person"></ion-icon>
+                                </span>
+                                <input type="text" class="form-control bg-dark" id="iceCreamSellerName"
+                                    name="iceCreamSellerName" title="Enter Seller's Name" required>
+                            </div>
+                            <!-- <button type="button" class="btn btn-primary btn-sm position-absolute" id="comfirm-Desc">Confirm</button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <!-- Submission -->
+            <div class="container-fluid d-flex justify-content-between align-items-center ps-5 pe-3">
+                <div class="d-flex justify-content-start align-items-center ">
+                    <input class="form-check-input m-3" type="checkbox" value="" id="iShopRetailerAgreement" required>
+                    <label class="form-check-label" for="iShopRetailerAgreement"
+                        title="Confirm To Publish an Ice Cream">
+                        I want to Sell an Ice Cream
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-warning float-end m-5 mt-3 disabled" style="min-width: 200px;"
+                    id="iShopSellButton" title="Sell My Icecream">Publish</button>
+            </div>
+
+
+        </form>
+    </div>
+
+</section>
+
+
+{% endblock %}
+{% block js %}
+
+<script>
+    iShopRetailerAgreement.onclick = function () {
+        if (iShopRetailerAgreement.checked == true) {
+            iShopSellButton.classList.remove('disabled');
+        } else {
+            iShopSellButton.classList.add('disabled');
+        }
+    }
+</script>
+
+<!-- Include the Quill library -->
+<script src="/static/js/quill.js"></script>
+
+<!-- Initialize Quill editor -->
+<script>
+    var toolbarOptions = [
+        ['bold', 'italic']
+    ]
+    var quill = new Quill('#iceLgdesc', {
+        modules: {
+            toolbar: [
+                [{ font: [] }],
+                [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                ["bold", "italic", "underline", "strike"],
+                [{ color: [] }, { background: [] }],
+                [{ script: "sub" }, { script: "super" }],
+                ["blockquote", "code-block"],
+                [{ list: "ordered" }, { list: "bullet" }],
+                [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+                ["link", "image", "video"],
+                ["clean"],
+            ]
+        },
+        theme: 'snow'
+    });
+</script>
+
+
+<script>
+    document.getElementById("quillHTML").classList.add("scroll-access");
+    document.getElementById("quillHTML").addEventListener("keyup", () => {
+        document.getElementById("IceCreamLgDesc").value = document.getElementById("quillHTML").innerHTML; 
+    });
+    document.getElementById("quillHTML").addEventListener("paste", () => {
+        document.getElementById("IceCreamLgDesc").value = document.getElementById("quillHTML").innerHTML; 
+    });
+    document.getElementById("quillHTML").addEventListener("click", () => {
+        document.getElementById("IceCreamLgDesc").value = document.getElementById("quillHTML").innerHTML; 
+    });
+</script>
+
+{% endblock js %}

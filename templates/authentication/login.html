@@ -1,0 +1,164 @@
+{% extends 'base-blank.html' %}
+
+{% block title %}
+Sign Up
+{% endblock title %}
+
+{% block stylesheet %}
+
+<style>
+  .divider:after,
+  .divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+  }
+
+  .h-custom {
+    height: calc(100% - 73px);
+  }
+
+  @media (max-width: 450px) {
+    .h-custom {
+      height: 100%;
+    }
+  }
+
+  .h100p {
+    height: 100%;
+  }
+</style>
+
+{% endblock stylesheet %}
+
+{% block body %}
+
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="/static/svgs/draw2.webp" class="img-fluid" alt="Sample image">
+      </div>
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+
+        <h2 class="mt-5 mb-3 pb-3 border-bottom">Log in <span style="color: orangered; font-weight: 500;"><span
+              style="color: orange;">i</span>Shop</span></h2>
+
+        <nav>
+          <div class="nav nav-tabs mb-3 d-flex justify-content-center" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-via-email-tab" data-bs-toggle="tab" data-bs-target="#nav-email"
+              type="button" role="tab" aria-controls="nav-email" aria-selected="true" tabindex="-1">Email</button>
+            <button class="nav-link" id="nav-via-username-tab" data-bs-toggle="tab" data-bs-target="#nav-username"
+              type="button" role="tab" aria-controls="nav-username">Username</button>
+          </div>
+        </nav>
+
+        <div class="tab-content h100p" id="nav-tabContent">
+          <div class="tab-pane fade active show" id="nav-email" role="tabpanel" aria-labelledby="nav-via-email-tab">
+
+            <!-- login with email -->
+
+            <form class=" mt-5 pt-3" method="post" action="/authenticateOurUser/login-email-auth">
+              {% csrf_token %}
+              <div class="row mb-3">
+                <label for="login-email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                  <input type="email" class="form-control bg-dark" id="login-email" name="login-email"
+                    placeholder="Enter your email" required>
+                </div>
+              </div>
+              <div class="row mb-3 my-5">
+                <label for="login-password01" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control bg-dark" id="login-password01" name="login-password01"
+                    placeholder="Enter your password" required>
+                </div>
+              </div>
+              <div class="row pb-3 mt-5 border-top d-flex justify-content-center">
+                <div class="col-sm-10 d-flex justify-content-between">
+                  <div class="form-check" style="margin-top: 30px;">
+                    <input class="form-check-input" type="checkbox" id="login-check-robot" required>
+                    <label class="form-check-label" for="login-check-robot">
+                      I'm not a robot
+                    </label>
+                  </div>
+                  <button type="submit" class="btn btn-primary float-end mt-4 me-4">Sign in</button>
+                </div>
+              </div>
+              <div class="row border-top d-flex justify-content-center align-items-center pt-1">
+                <div class="col-sm-7 d-flex justify-content-between">
+                  <p class="small fw-bold t-1 mb-0">Don't have an account? <a href="/authenticateOurUser/signup/"
+                      class="link-danger">Signup</a></p>
+                </div>
+                <div class="col-sm-5 d-flex justify-content-between">
+                  <a href="/authenticateOurUser/forget-password-identification/" class="text-body">Forgot password?</a>
+                </div>
+              </div>
+            </form>
+
+          </div>
+          <div class="tab-pane fade" id="nav-username" role="tabpanel" aria-labelledby="nav-via-username-tab">
+
+            <!-- login with username -->
+
+            <form class=" mt-5 pt-3" method="post" action="/authenticateOurUser/login-username-auth">
+              {% csrf_token %}
+              <div class="row mb-3">
+                <label for="login-username" class="col-sm-2 col-form-label">Username</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control bg-dark" id="login-username" name="login-username"
+                    placeholder="Enter your username" required>
+                </div>
+              </div>
+              <div class="row mb-3 my-5">
+                <label for="login-password02" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control bg-dark" id="login-password02" name="login-password02"
+                    placeholder="Enter your password" required>
+                </div>
+              </div>
+              <div class="row pb-3 mt-5 border-top d-flex justify-content-center">
+                <div class="col-sm-10 d-flex justify-content-between">
+                  <div class="form-check" style="margin-top: 30px;">
+                    <input class="form-check-input" type="checkbox" id="login-check-robot-usename" required>
+                    <label class="form-check-label" for="login-check-robot-usename">
+                      I'm not a robot
+                    </label>
+                  </div>
+                  <button type="submit" class="btn btn-primary float-end mt-4 me-4">Sign in</button>
+                </div>
+              </div>
+              <div class="row border-top d-flex justify-content-center align-items-center pt-1">
+                <div class="col-sm-7 d-flex justify-content-between">
+                  <p class="small fw-bold t-1 mb-0">Don't have an account? <a href="/authenticateOurUser/signup/"
+                      class="link-danger">Signup</a></p>
+                </div>
+                <div class="col-sm-5 d-flex justify-content-between">
+                  <a href="/authenticateOurUser/forget-password-identification" class="text-body">Forgot password?</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div
+    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-dark border-top">
+    <!-- Copyright -->
+    <div class="text-white mb-3 mb-md-0">
+      Copyright © iShop 2023. All rights reserved.
+    </div>
+    <!-- Right -->
+  </div>
+</section>
+
+{% block js %}
+
+
+
+{% endblock js %}
+
+{% endblock %}

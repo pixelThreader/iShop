@@ -1,0 +1,117 @@
+{% extends 'base-blank.html' %}
+
+{% block title %}Forgot-Password{% endblock title %}
+
+{% block stylesheet %}
+
+<style>
+    .forget_password_section {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .forget_password_section_form {
+        height: 60%;
+        width: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .pen {
+        cursor: default;
+    }
+
+    #k0002 {
+        height: 30px;
+        width: 30px;
+        transform: translateX(40px);
+        border: none;
+    }
+
+    #k0001 {
+        filter: invert(0.4);
+    }
+
+    #k0001:hover {
+        filter: invert(0.8);
+    }
+
+    #k0001:active {
+        filter: invert(1);
+    }
+</style>
+
+{% endblock stylesheet %}
+
+
+{% block body %}
+
+
+<section class="container forget_password_section flex-column position-relative">
+
+    <h2 class="mt-2 mb-5">Forget Password Identification</h2>
+
+    <form action="/authenticateOurUser/forget-password-identification/" method="post"
+        class="forget_password_section_form border border-info flex-column p-3 rounded-2 position-relative">
+        {% csrf_token %}
+        <button class="btn rounded-circle p-0 position-absolute top-0 end-0" id="k0002" title="Help" type="button"
+            data-bs-toggle="modal" data-bs-target="#ForgetPasswordHelpModal">
+            <img src="/static/svgs/information-circle-outline.svg" height="90%" width="90%" alt="help" class="img-fluid"
+                id="k0001" />
+        </button>
+
+
+        <input type="text" class="form-control bg-dark" placeholder="Username" name="FGPasswordUsername" required>
+        <input type="text" class="form-control bg-dark my-4" placeholder="Any one of your generated ID" name="FGPasswordGID" required>
+        <input type="text" class="form-control bg-dark" placeholder="Registered phone number(Not Optional One)" name="FGPasswordPhone" required>
+        <hr class="my-5" style="width: 100%;">
+        <div class="d-flex justify-content-between" style="width: 100%;">
+            <div class="form-check" style="padding-top: 6px !important;">
+                <input class="form-check-input" type="checkbox" id="login-check-robot" required>
+                <label class="form-check-label" for="login-check-robot">
+                    I'm not a robot
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Check Identity</button> 
+            <!-- <a href="/authenticateOurUser/set-new-password" class="btn btn-primary">Check Identity</a> For testing Purpuses Only -->
+        </div>
+    </form>
+
+    <h3 style="color: orangered; font-weight: 500;" class="position-absolute bottom-0 end-0 m-4"><span
+            style="color: orange;">i</span>Shop</h3>
+
+</section>
+
+<!-- Modal For Help(Generated Id) -->
+
+<div class="modal fade" id="ForgetPasswordHelpModal" tabindex="-1" aria-labelledby="ForgetPasswordHelpModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 pen" id="ForgetPasswordHelpModalLabel">Help Forget Password Identification
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pen">
+                <h5 class="mb-4 text-info">What Should We Enter in Form?</h5>
+                <ul>
+                    <li class="mb-3">Your Registerd Username at <span style="color: orangered; font-weight: 500;"><span style="color: orange;">i</span>Shop</span> </li>
+                    <li class="mb-3">Any One of the Generated Id at <span style="color: orangered; font-weight: 500;"><span style="color: orange;">i</span>Shop</span> </li>
+                    <li>Your Registerd Phone Number at <span style="color: orangered; font-weight: 500;"><span style="color: orange;">i</span>Shop</span> </li>
+                    <p class="text-muted">Don't Enter The Alternate Phone Number If You Registerd To Us.</p>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% block js %}{% endblock js %}
+
+
+{% endblock body %}

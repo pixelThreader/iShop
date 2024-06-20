@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %}{% endblock title %} | iShop </title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="/static/brand/iShop.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body {
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .scroll-access::-webkit-scrollbar {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 5px;
+            background: transparent;
+        }
+
+        .scroll-access-none::-webkit-scrollbar {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            display: none;
+        }
+
+        .scroll-access::-webkit-scrollbar-thumb {
+            width: 100%;
+            background: #555;
+            border-radius: 5px;
+        }
+
+        .pen {
+            cursor: default;
+        }
+
+        .usn {
+            user-select: none;
+        }
+
+        .authenticated_icons {
+            font-size: 20px;
+        }
+
+        #backToTop {
+            position: fixed;
+            height: 40px;
+            width: 40px;
+            background: #02ffcc4b;
+            bottom: 0;
+            right: 0;
+            margin: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            outline: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        #backToTop svg polyline {
+            fill: none;
+            stroke: #1cc3cc;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 32px;
+            filter: drop-shadow(0 0 8px #1cc);
+        }
+
+        #backToTop svg path {
+            fill: none;
+            stroke: #1cc3cc;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+            stroke-dasharray: 1300;
+            stroke-dashoffset: 0;
+            transition: .3s;
+        }
+
+        #backToTop:hover svg path {
+            fill: none;
+            stroke: #1cc3cc;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 450;
+            transition: .5s;
+        }
+    </style>
+    {% block stylesheet %}{% endblock stylesheet %}
+</head>
+
+<body data-bs-theme="dark" class="overflow-hidden position-relative">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom mb-2" style="height: 12%;" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/" style="transform: translateX(23px);">
+                <h3 style="color: orangered;"><span style="color: orange;">i</span>Shop</h3>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <div class="container-fluid">
+                    <div class="row d-flex justify-content-center align-items-center"
+                        style="height: 100%; width: 100%;">
+                        <div class="col-1 d-flex justify-content-center align-items-center" style="height: 40px;">
+                            <div class="vr"></div>
+                        </div>
+                        <div class="col-7">
+                            <form class="d-flex" method="get" role="search" action="/search">
+                                <input class="form-control me-2 rounded-pill bg-dark " type="search" name="query"
+                                    placeholder="Search" aria-label="Search"
+                                    title="Search Range Of IceCreams, Flavours etc.">
+                                <button class="btn btn-outline-success rounded-pill" type="submit" title="Safe search">
+                                    <img src="/static/svgs/search-outline.svg" height="30px" width="30px" alt="search"
+                                        class="img-fluid" style="filter: invert(1);">
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="col-1 d-flex justify-content-center align-items-center" style="height: 40px;">
+                            <div class="vr"></div>
+                        </div>
+
+                        <div class="col-1 d-flex justify-content-center align-items-center" style="height: 50px;">
+                            <div class="rounded-circle border d-flex justify-content-center align-items-center position-relative pointer"
+                                type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
+                                aria-controls="offcanvasBottom" style="height: 50px; width: 50px; cursor: pointer;">
+                                <img src="/static/svgs/mail-outline.svg" alt="user" class="img-fluid" height="60%"
+                                    width="60%"
+                                    style="filter: invert(87%) sepia(1%) saturate(0%) hue-rotate(334deg) brightness(97%) contrast(88%);">
+                                <span class="badge text-bg-danger position-absolute"
+                                    style="transform: translateX(25px) translateY(-18px);">3</span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-1 d-flex justify-content-center align-items-center" style="height: 50px;">
+                            <a href="/cart/my-cart/">
+                                <div class="rounded-circle border d-flex justify-content-center align-items-center position-relative"
+                                    title="Your Cart" style="height: 50px; width: 50px;">
+                                    <img src="/static/svgs/cart.svg" alt="user" class="img-fluid" height="60%"
+                                        width="60%"
+                                        style="filter: invert(87%) sepia(1%) saturate(0%) hue-rotate(334deg) brightness(97%) contrast(88%);">
+                                    <span class="badge text-bg-danger position-absolute"
+                                        style="transform: translateX(25px) translateY(-18px);"
+                                        id="NumberOfCartProducts">
+                                        {{ NoCartItems|length }} {{ num_cart_items }}
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-1 d-flex justify-content-center align-items-center" style="height: 50px;">
+
+                            {% if user.is_anonymous %}
+
+                            <div class="rounded-circle border d-flex justify-content-center align-items-center"
+                                title="AnonymousUser" style="height: 50px; width: 50px;" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false" title="show other Pages">
+                                <img src="/static/svgs/person-circle.svg" alt="user" class="img-fluid rounded-circle"
+                                    height="90%" width="90%"
+                                    style="filter: invert(87%) sepia(1%) saturate(0%) hue-rotate(334deg) brightness(97%) contrast(88%);">
+                            </div>
+                            <ul class="dropdown-menu dropdown-menu-dark p-2 rounded-3 mx-0 border-0 shadow"
+                                style="position: absolute; transform: translateX(1150px);">
+                                <li><a class="dropdown-item rounded-2" href="/authenticateOurUser/signup">Signup</a>
+                                </li>
+                                <li><a class="dropdown-item rounded-2" href="/authenticateOurUser/login-auth">Login</a>
+                                </li>
+                            </ul>
+
+                            {% endif %}
+
+                            <!-- if user is_authenticated -->
+
+                            {% if user.is_authenticated %}
+
+                            <div class="rounded-circle border d-flex justify-content-center align-items-center"
+                                title="Hii, {{ request.user }}" style="height: 50px; width: 50px;" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false" title="show other Pages">
+                                <img src="/static/Uploaded_Products/{{ request.user.additionalusercredentials.Avatar }}"
+                                    alt="user" class="img-fluid rounded-circle" height="90%" width="90%">
+                            </div>
+                            <ul class="dropdown-menu dropdown-menu-dark p-2 rounded-3 mx-0 border-0 shadow"
+                                style="position: absolute; transform: translateX(1140px);">
+                                <li><a class="dropdown-item rounded-2 d-flex align-items-center"
+                                        href="/authenticateOurUser/myProfile">
+                                        <i class="bi bi-person-bounding-box me-3 authenticated_icons"></i>Profile</a>
+                                </li>
+                                <li><a class="dropdown-item rounded-2 d-flex align-items-center" href="#">
+                                        <ion-icon name="heart"
+                                            class="me-3 authenticated_icons"></ion-icon>MyFavourites</a></li>
+                                <li><a class="dropdown-item rounded-2 d-flex align-items-center" href="/settings">
+                                        <ion-icon name="settings-sharp"
+                                            class="me-3 authenticated_icons"></ion-icon>Settings</a></li>
+                                <li><a class="dropdown-item rounded-2 d-flex align-items-center"
+                                        href="/authenticateOurUser/signup">
+                                        <ion-icon name="person" class="me-3 authenticated_icons"></ion-icon>Create
+                                        New Account</a></li>
+                                <li><a class="dropdown-item rounded-2 d-flex align-items-center"
+                                        href="/stock/upload-products">
+                                        <ion-icon name="cloud-upload" class="me-3 authenticated_icons"></ion-icon>
+                                        Upload a Product</a></li>
+                                <li>
+                                <li><a class="dropdown-item rounded-2 d-flex align-items-center" href="/contact">
+                                        <ion-icon name="mail" class="me-3 authenticated_icons"></ion-icon>Contact US</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item rounded-2 d-flex align-items-center"
+                                        href="/authenticateOurUser/logout"> <ion-icon name="log-out-outline"
+                                            class="me-3 authenticated_icons"></ion-icon>Logout</a>
+                                </li>
+                            </ul>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid d-flex justify-content-center align-items-center pt-1 pb-2 border-bottom {% block miniNav %}{% endblock miniNav %}"
+        style="height: 7%;">
+        <a href="/about" class="btn btn-sm {% block aboutActive %}btn-outline-secondary{% endblock aboutActive %} mx-3"
+            title="About Us">About</a>
+        {% if user.is_superuser %}
+        <a href="/admin" class="btn btn-sm btn-outline-secondary mx-3" target="_blank" title="About Us">Admin</a>
+        {% endif %}
+        <a href="/blog" class="btn btn-sm {% block blogActive %}btn-outline-secondary{% endblock blogActive %} mx-3"
+            title="Blog">Blog</a>
+        <a href="/stock/products"
+            class="btn btn-sm {% block productsActive %} btn-outline-secondary {% endblock productsActive %} mx-3"
+            title="Product">Products</a>
+
+        <div class="btn-group mx-3">
+            <a class="btn btn-sm btn-outline-secondary" href="/stock/category" title="show Categories">
+                Categories
+            </a>
+            <a type="button" href="#" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropdown</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Softy</a></li>
+                <li><a class="dropdown-item" href="#">Stick</a></li>
+                <li><a class="dropdown-item" href="#">Cones</a></li>
+                <li><a class="dropdown-item" href="#">Love</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Family Packs</a></li>
+            </ul>
+        </div>
+
+        <a class="btn btn-sm btn-outline-secondary mx-3" href="#" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false" title="show other Pages">
+            Other Pages
+        </a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/blog/post">Post</a></li>
+            <li><a class="dropdown-item" href="/blog/search">Blog Search</a></li>
+            <li><a class="dropdown-item" href="/search">Home Search</a></li>
+            <li><a class="dropdown-item" href="/retail/checkout">Checkout</a></li>
+            <li><a class="dropdown-item" href="/retail/payments">Payment</a></li>
+            <li><a class="dropdown-item" href="/retail/your_invoice">Invoice</a></li>
+        </ul>
+    </div>
+
+    <!-- THE CONTENT ARE ITERATED HERE -->
+    <div class="container-fluid scroll-access"
+        style="overflow-y: scroll; height: {% block contentContainerHeight %}81%{% endblock contentContainerHeight %};" id="main-content-ishop">
+
+        {% block body %}{% endblock body %}
+        <!-- Footer -->
+        <footer class="my-5 pt-5 text-body-secondary text-center text-small">
+            <p class="mb-1">&copy; 2023 iShop</p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="/legal-documents/our-privacy-and-policy">Privacy</a></li>
+                <li class="list-inline-item"><a href="/legal-documents/our-terms-and-conditions">Terms</a></li>
+                <li class="list-inline-item"><a href="/legal-documents/support">Support</a></li>
+            </ul>
+        </footer>
+    </div>
+
+    <!-- Back top top -->
+    <button id="backToTop" title="Go to Top" toWhere="#page-top" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 512 512">
+            <polyline points="352 296 256 200 160 296" />
+            <path d="M256,64C150,64,64,150,64,256s86,192,192,192,192-86,192-192S362,64,256,64Z" />
+        </svg>
+    </button>
+
+
+    <!-- Messages OffCanvas -->
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasBottomLabel">Offcanvas bottom</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body small" id="notifications">
+        </div>
+    </div>
+
+    {% if messages %}
+    <!-- alert -->
+    <style>
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+            animation: none;
+        }
+    </style>
+    <div class="container-fluid position-fixed bottom-0" style="z-index: 9999">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show position-relative" style="width: 400px;"
+            data-bs-theme="dark" role="alert" id="myAlert">
+            <div class="h6 text-center border-bottom pb-3">
+                <img src="/static/brand/iShop.png" alt="30px" height="" width="30px" class="position-absolute start-0"
+                    style="transform: translateX(24px) translateY(-5px);">
+                <span style="color: orangered; font-weight: 500;">
+                    <span style="color: orange;">i</span>Shop
+                </span> Message
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <p>
+                {{ message }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- script for alert -->
+    <script>
+        var myAlerts = document.querySelectorAll('.alert');
+        myAlerts.forEach(function (alert) {
+            setTimeout(function () {
+                alert.classList.add('fade-out');
+                setTimeout(function () {
+                    alert.style.display = "none";
+                }, 500);
+            }, 3000);
+        });
+    </script>
+    {% endif %}
+
+
+
+    <!-- Required scripts -->
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/jquery-3.7.0.min.js"></script>
+    <!-- ionicons scripts -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    !-- back top top scripts -->
+    <script src="/static/js/jquery.easing.min.js"></script>
+    <script src="/static/js/backtotop.js"></script>
+    <!-- script for offcanvas messages  -->
+    <script>
+        function CloseMessage(button) {
+            var notificationId = button.getAttribute('data-bs-dismiss');
+            var notification = document.querySelector(notificationId);
+            notification.parentNode.removeChild(notification);
+        }
+
+        var notificationsContainer = document.querySelector('#notifications');
+
+        // Add multiple notifications dynamically
+        for (var i = 1; i <= 5; i++) {
+            var notification = document.createElement('div');
+            notification.setAttribute('class', 'container-fluid bg-info-subtle border border-info');
+            notification.setAttribute('style', 'height: 200px;');
+            notification.setAttribute('id', 'not' + i);
+
+            var closeButton = document.createElement('button');
+            closeButton.setAttribute('type', 'button');
+            closeButton.setAttribute('class', 'btn-close');
+            closeButton.setAttribute('aria-label', 'Close');
+            closeButton.setAttribute('data-bs-dismiss', '#not' + i);
+            closeButton.addEventListener('click', function () {
+                var notificationId = this.getAttribute('data-bs-dismiss');
+                var notification = document.querySelector(notificationId);
+                notification.parentNode.removeChild(notification);
+            });
+
+            var message = document.createElement('p');
+            message.innerHTML = 'This is notification ' + i + '.';
+
+            notification.appendChild(closeButton);
+            notification.appendChild(message);
+            notificationsContainer.appendChild(notification);
+        }
+    </script>
+    {% block js %}
+    {% endblock js %}
+
+</body>
+
+</html>

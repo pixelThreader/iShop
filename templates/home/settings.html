@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings{% endblock title %}
+
+{% block body %}
+
+<section class="container">
+
+    <h1 class="text-center text-warning my-5">Settings
+        <sup style="color: orangered;"><span style="color: orange;">i</span>Shop</sup>
+    </h1>
+
+    <!-- 1st Section -->
+
+    <div class="container-fluid p-0 position-relative mb-4">
+        <span class="badge text-bg-success position-absolute"
+            style="transform: translateX(30px) translateY(-10px);">Success</span>
+        <div class="container-fluid border pt-5 pb-3 px-0 rounded-3">
+            <div class="vstack gap-3">
+                <div class="p-2 border-bottom">
+
+                    <!-- switch -->
+                    <div class="row p-0 m-0">
+                        <div class="col-9">
+                            Setting
+                        </div>
+                        <div class="col-1 d-flex justify-content-end align-items-center">
+                            <div class="vr"></div>
+                        </div>
+                        <div class="col-2 d-flex justify-content-evenly align-items-center">
+                            <div>Off</div>
+                            <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                <input class="form-check-input bg-dark" type="checkbox" role="switch"
+                                    id="flexSwitchCheckDefault">
+                            </div>
+                            <div>On</div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="p-2 border-bottom">
+
+                    <div class="row p-0 m-0">
+                        <div class="col-9">
+                            Setting
+                        </div>
+                        <div class="col-1 d-flex justify-content-end align-items-center">
+                            <div class="vr"></div>
+                        </div>
+                        <div class="col-2 d-flex justify-content-evenly align-items-center">
+                            <div>Off</div>
+                            <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                <input class="form-check-input bg-dark" type="checkbox" role="switch"
+                                    id="flexSwitchCheckDefault">
+                            </div>
+                            <div>On</div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="p-2">
+
+                    <div class="row p-0 m-0">
+                        <div class="col-9">
+                            Setting
+                        </div>
+                        <div class="col-1 d-flex justify-content-end align-items-center">
+                            <div class="vr"></div>
+                        </div>
+                        <div class="col-2 d-flex justify-content-evenly align-items-center">
+                            <div>Off</div>
+                            <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                <input class="form-check-input bg-dark" type="checkbox" role="switch"
+                                    id="flexSwitchCheckDefault">
+                            </div>
+                            <div>On</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2nd Section -->
+
+    <div class="container-fluid p-0 position-relative mb-4">
+        <span class="badge text-bg-info position-absolute"
+            style="transform: translateX(30px) translateY(-10px);">Configuration-2</span>
+        <div class="container-fluid border pt-5 pb-3 px-0 rounded-3">
+            <div class="vstack gap-3">
+                <div class="p-2 border-bottom">
+
+                    <!-- switch -->
+                    <div class="row p-0 m-0">
+                        <div class="col-9">
+                            <label for="inputState" class="form-label">Setting</label>
+                        </div>
+                        <div class="col-1 d-flex justify-content-end align-items-center">
+                            <div class="vr"></div>
+                        </div>
+                        <div class="col-2 d-flex justify-content-evenly align-items-center">
+                            <select id="inputState" class="form-select bg-dark">
+                                <option selected>Choose...</option>
+                                <option>...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="p-2 border-bottom">
+
+                    <div class="row p-0 m-0">
+                        <div class="col-9">
+                            Setting
+                        </div>
+                        <div class="col-1 d-flex justify-content-end align-items-center">
+                            <div class="vr"></div>
+                        </div>
+                        <div class="col-2 d-flex justify-content-evenly align-items-center">
+                            <div>Off</div>
+                            <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                <input class="form-check-input bg-dark" type="checkbox" role="switch"
+                                    id="flexSwitchCheckDefault">
+                            </div>
+                            <div>On</div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="p-2">
+
+                    <div class="row p-0 m-0">
+                        <div class="col-9">
+                            Setting
+                        </div>
+                        <div class="col-1 d-flex justify-content-end align-items-center">
+                            <div class="vr"></div>
+                        </div>
+                        <div class="col-2 d-flex justify-content-evenly align-items-center">
+                            <div>Off</div>
+                            <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                <input class="form-check-input bg-dark" type="checkbox" role="switch"
+                                    id="flexSwitchCheckDefault">
+                            </div>
+                            <div>On</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="mt-5 mb-3">
+
+    <!-- Final Save-button -->
+    <div class="container-fluid pb-5">
+        <div class="row">
+            <div class="col-7 d-flex justify-content-start align-items-center"  data-bs-theme="dark">
+                <div class="form-check">
+                    <input class="form-check-input bg-dark mx-3" type="checkbox" value="" id="flexCheckChecked">
+                    <label class="form-check-label" for="flexCheckChecked">
+                      Save My Settings For Future.
+                    </label>
+                  </div>
+            </div>
+            <div class="col-5 d-flex justify-content-end align-items-center">
+                <button type="submit" class="btn btn-outline-warning rounded-pill">Save</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock body %}

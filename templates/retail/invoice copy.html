@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iShop | Invoice For Customer</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="/static/brand/iShop.png" type="image/x-icon">
+    <style>
+        img {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            user-select: none;
+        }
+
+        .h95p {
+            height: 95%;
+        }
+
+        .h100p {
+            height: 100%;
+        }
+
+        .codes-section {
+            height: 100%;
+            width: 280px;
+        }
+
+        .codes-section #qrimg {
+            height: 130px;
+            width: 130px;
+            object-fit: cover;
+            transform: translateX(24px);
+        }
+
+        #barimg {
+            height: 80px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .address-section {
+            height: 100%;
+            width: 348px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: end;
+        }
+
+        #address-brief {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            font-size: 12px;
+        }
+
+        #address-brief p {
+            color: #000;
+        }
+
+        .address-section .shipping-details {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body data-bs-theme="dark">
+
+    <section class="container h95p border p-0 bg-light" style="width: 630px;">
+        <div class="container-fluid border-bottom p-0 bg-warning" style="height: 100px;">
+            <div class="row m-0 p-0 h100p">
+                <div class="col-6 d-flex align-items-start flex-column justify-content-center h100p">
+                    <h1 style="color: #000; font-weight: 700;">iShop INVOICE</h1>
+                    <p style="color: #000">
+                        Contact : ishopicecreams@gmail.com
+                    </p>
+                </div>
+                <div class="col-3"></div>
+                <div class="col-3">
+                    <p style="color: #000; font-size: 16p">32/P Baker Street, Gurgaon, Greater Noida West, Andhra
+                        Pradesh</p>
+                </div>
+            </div>
+            <!-- invoice area -->
+            <div class="container-fluid p-0 position-relative" style="height: 492.750px;">
+                <section style="height: 40%;" class="d-flex">
+                    <div class="codes-section">
+                        <div class="qr d-flex justify-content-between align-items-center my-2 p-1" style="height: 90%;">
+                            <div class="overflow-hidden border position-relative" id="qrimg">
+                                <img src="/static/Uploads_from_User/qrRetail/qrAlpha.png" alt="">
+                                <span style="height: 100%; width: 100%; top: 0; position: absolute; display: block;"></span>
+                            </div>
+                            <p class="p-0 m-0 text-dark" style="font-size: 12px; max-width: 90px;">For Your Info Scan
+                                Verification QR</p>
+                        </div>
+                    </div>
+                    <div class="address-section">
+
+                        <div class="row p-0 m-0 h100p" style="width: 100%;">
+
+                            <div class="col-4"></div>
+                            <div class="col-8" id="address-brief">
+                                <p class="p-0 mb-2">Piyush Rana</p>
+                                <p class="p-0 mb-2 text-end">
+                                    AD1 : 32/P Baker Street, Gurgaon, Greater Noida West, Andhra Pradesh
+                                </p>
+                                <p class="p-0 mb-2 text-end">
+                                    AD2 : 32/P Baker Street, Gurgaon, Greater Noida West, Andhra Pradesh
+                                </p>
+                                <p class="p-0 mb-2 text-end">
+                                    PH1 : +91 9234567876
+                                </p>
+                                <p class="p-0 m-0 text-end">
+                                    PH2 : +91 9234567876
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </section>
+                <section style="height: 15%;">
+
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:35%; color: #000;" class="text-start ps-3">Product</th>
+                                <th style="width:14%; color: #000;">Tax</th>
+                                <th style="width:13%; color: #000;">Shipping</th>
+                                <th style="width:15%; color: #000;">Price</th>
+                                <th style="width:16%; color: #000;">Paid/Unpaid</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th style="font-weight: 400; color: #000; font-size: 16px;" scope="row">4 Icecreams</th>
+                                <td style="font-weight: 400; color: #000; font-size: 16px;">₹ 549.75</td>
+                                <td style="font-weight: 400; color: #000; font-size: 16px;">₹ 00.00</td>
+                                <td style="font-weight: 400; color: #000; font-size: 16px;">₹ 4329.43</td>
+                                <td style="font-weight: 400; color: #000; font-size: 16px;">Paid</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </section>
+                <section style="height: 35%;">
+                    <div class="row m-0 p-0 h100p">
+                        <div class="col-6">
+                            <hr class="mt-0">
+                            <div class="bar position-relative">
+                                <div class="overflow-hidden position-relative" id="barimg">
+                                    <img src="/static/Uploads_from_User/barRetail/iStestBar.jpeg" alt="">
+                                    <span style="height: 100%; width: 100%; top: 0; position: absolute; display: block;"></span>
+                                </div>
+                                <p style="position: absolute; top: -18px; left: 10px; font-size: 12px;">
+                                    IcecreamShippingID
+                                </p>
+                            </div>
+                            <div class="container-fluid position-relative" style="height: 75px;">
+                                iShop Authority :
+                                <div class="container-fluid border position-absolute"
+                                    style="height: 75px;top: 0;right: 0;width: 153px; object-fit: cover;">
+                                    <img src="/static/brand/iShopAuthority.PNG" alt="signauthority">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 border-start h100p">
+                            <h2 style="font-weight: 400; color: #000;">Product Amount</h2>
+                            <h2 style="font-weight: 400; color: #000;">₹ 4329.43</h2>
+                            <p class="mb-1">In words : <span class="text-secondary">Four thousand, three hundred and twenty-nine point four three</span></p>
+                            <p class="text-end text-dark"><span style="color: #e04ac0;">Payment</span> : <span style="color: #003aff;">via PayPal</span></p>
+                        </div>
+                    </div>
+                </section>
+                <section style="height: 10%;" class="border-top d-flex justify-content-center align-items-center text-success">
+                    Thank you for purchasing
+                </section>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
