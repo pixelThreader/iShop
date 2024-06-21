@@ -21,7 +21,7 @@ class AdditionalUserCredentials(models.Model):
     state = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     pinCode = models.CharField(max_length=6)
-    Avatar = models.ImageField(upload_to="profile/avatar", default="Uploads_from_User/profile/avatar/person-circle.svg")
+    Avatar = models.ImageField(upload_to="Uploads_from_User/profile/avatar", default="Uploads_from_User/profile/avatar/person-circle.svg")
 
     class Meta:
         verbose_name = "UserCredentials"

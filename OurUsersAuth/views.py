@@ -15,51 +15,61 @@ def signup(request):
 
     def GenerateRandomId(InputUsername):
         N = 3
-        username = InputUsername
         alpha = '!@$%&?'
         numerics = '1234567890'
-        res = ''.join(random.choices(username + alpha + numerics, k=N))
-        generatedid = '91' + username[:5] + res
+        res = ''.join(random.choices(InputUsername + alpha + numerics, k=N))
+        generatedid = '91' + InputUsername[:5] + res
         return generatedid
 
     if request.method == 'POST':
-        """
-        Tip for file update:
-        settings.py <--
-        views.py <-- {request.FILES.get}                
-        FormSendingHtml <-- 
-        importants ⇾            _________↧↧⇓________________
-        <form ... method="post" enctype="multipart/form-data">
-        """
-        profilePhoto = request.FILES.get('useravatar')
-        print(profilePhoto)
-        username = request.POST.get('userName')
-        firstname = request.POST.get('firstName')
-        lastname = request.POST.get('lastName')
-        birthbday = request.POST.get('userBirthDate')
-        gender = request.POST.get('userGender')
-        email = request.POST.get('userEmail')
-        password = request.POST.get('userPassword')
-        # CfrmPassword = request.POST.get('userPasswordConfirm')
-        phone = request.POST.get('userPhone')
-        phonealt = request.POST.get('userPhoneAlt')
-        country = request.POST.get('userAddressCountry')
-        state = request.POST.get('userAddressState')
-        city = request.POST.get('userAddressCity')
-        pincode = request.POST.get('userAddressZip')
-        identity_1 = GenerateRandomId(username)
-        identity_2 = GenerateRandomId(username)
-        if identity_1 == identity_2:
+        try:
+            profilePhoto = request.FILES.get('useravatar')
+            username = request.POST.get('userName')
+            firstname = request.POST.get('firstName')
+            lastname = request.POST.get('lastName')
+            birthbday = request.POST.get('userBirthDate')
+            gender = request.POST.get('userGender')
+            email = request.POST.get('userEmail')
+            password = request.POST.get('userPassword')
+            phone = request.POST.get('userPhone')
+            phonealt = request.POST.get('userPhoneAlt')
+            country = request.POST.get('userAddressCountry')
+            state = request.POST.get('userAddressState')
+            city = request.POST.get('userAddressCity')
+            pincode = request.POST.get('userAddressZip')
+
+            identity_1 = GenerateRandomId(username)
             identity_2 = GenerateRandomId(username)
+            while identity_1 == identity_2:
+                identity_2 = GenerateRandomId(username)
 
-        user_now = User.objects.create_user(
-            username=username, password=password, email=email, first_name=firstname, last_name=lastname)
-        user = AdditionalUserCredentials(user=user_now, Emergency_id01=identity_1, Emergency_id02=identity_2, Avatar=profilePhoto, phone=phone, phone_alt=phonealt, gender=gender, birth=birthbday, country=country, state=state, city=city, pinCode=pincode)
+            user_now = User.objects.create_user(
+                username=username, 
+                password=password, 
+                email=email, 
+                first_name=firstname, 
+                last_name=lastname
+            )
 
-        user.save()
-        # Display a notification
-        messages.success(request, firstname + "! Your Account Has Been Created Successfully.")
-        return redirect("home:home")
+            user = AdditionalUserCredentials(
+                user=user_now, 
+                Emergency_id01=identity_1, 
+                Emergency_id02=identity_2,
+                phone=phone, 
+                phone_alt=phonealt, 
+                gender=gender, 
+                birth=birthbday, 
+                country=country, 
+                state=state, 
+                city=city, 
+                pinCode=pincode,
+                Avatar=profilePhoto,
+            )
+            user.save()
+            messages.success(request, f"{firstname}! Your Account Has Been Created Successfully.")
+            return redirect("home:home")
+        except Exception:
+            messages.error(request, "An error occurred during the signup process. Please try again.")
 
     return render(request, 'authentication/signup.html')
 
