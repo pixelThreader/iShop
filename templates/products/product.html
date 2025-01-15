@@ -487,9 +487,9 @@
                                     style="height: 30px; width: 30px; transform: translateY(3px) translateX(8px);"
                                     thisisthetgtcomment="{{ comment.sno }}">
                                     {% for dislike in dislikedComment|get_val:comment.sno %}
-                                    {% if dislike %}
-                                    {{ dislike.icon|safe }}
-                                    {% endif %}
+                                        {% if dislike %}
+                                            {{ dislike.icon|safe }}
+                                        {% endif %}
                                     {% endfor %}
                                     <i class="bi bi-hand-thumbs-down position-absolute" style="opacity: 0.5;"></i>
                                 </button>
