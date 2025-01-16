@@ -3,11 +3,19 @@ from django.http import HttpResponse
 from cart.models import Cart
 from products.models import AllProducts
 from .models import Cupons, Info_Payment_for_one
-from utilities.utilities import GenerateIdBig, GenerateDiscount, GenerateCuponId, numWordic, GenerateBarId
+from utilities.utilities import (
+    GenerateIdBig,
+    GenerateDiscount,
+    GenerateCuponId,
+    numWordic,
+    GenerateBarId,
+)
 from utilities.genBAR import bar
 from utilities.genQR import qr
+
 # for precise discount calculations
 from decimal import Decimal
+
 # for async data response to template
 from django.http import JsonResponse
 
@@ -15,15 +23,16 @@ from django.http import JsonResponse
 
 
 def Checkout(request):
-    if request.method == 'POST':
-        forcupon = request.POST.get('forwhat')
+    if request.method == "POST":
+        forcupon = request.POST.get("forwhat")
         if forcupon == "CuponCode":
-            code = request.POST.get('redeemcode')
-            identity = request.POST.get('CuponId')
-            MaxPrice = request.POST.get('MaxPrice')
+            code = request.POST.get("redeemcode")
+            identity = request.POST.get("CuponId")
+            MaxPrice = request.POST.get("MaxPrice")
             # getting which cupon is being used
             cuponIS = Cupons.objects.filter(
-                cupon_user=request.user, cupon_code=code, cupon_id=identity)
+                cupon_user=request.user, cupon_code=code, cupon_id=identity
+            )
             # checking cupon exist or not
             if cuponIS.count() == 0:
                 getTheCupon = None
@@ -35,14 +44,13 @@ def Checkout(request):
                 Cupon_s_Code = getTheCupon.cupon_code
                 Cupon_s_Discount = getTheCupon.cupon_discount
                 Cupon_s_Discount = Decimal(getTheCupon.cupon_discount)
-                MaxPrice = Decimal(request.POST.get('MaxPrice'))
+                MaxPrice = Decimal(request.POST.get("MaxPrice"))
                 amount_left = (Cupon_s_Discount / 100) * MaxPrice
-                discount_amount = amount_left.quantize(Decimal('.01'))
-                payable_price = (
-                    MaxPrice - discount_amount).quantize(Decimal('.01'))
+                discount_amount = amount_left.quantize(Decimal(".01"))
+                payable_price = (MaxPrice - discount_amount).quantize(Decimal(".01"))
                 Valid = "Cupon Valid"
             else:
-                Cupon_s_Code = 'Not a cupon'
+                Cupon_s_Code = "Not a cupon"
                 Cupon_s_Discount = 0
                 MaxPrice = 0
                 amount_left = 00
@@ -56,57 +64,76 @@ def Checkout(request):
             usedCupons.save()
 
             # Return the "getTheCupon" value as a JSON response
-            return JsonResponse({'getTheCupon': str(getTheCupon), 'cupon_code': str(Cupon_s_Code), 'cupon_discount': str(Cupon_s_Discount), 'cupon_applied': str(discount_amount), 'youPay': payable_price, 'validity': str(Valid)})
-        forpay = request.POST.get('forpay')
+            return JsonResponse(
+                {
+                    "getTheCupon": str(getTheCupon),
+                    "cupon_code": str(Cupon_s_Code),
+                    "cupon_discount": str(Cupon_s_Discount),
+                    "cupon_applied": str(discount_amount),
+                    "youPay": payable_price,
+                    "validity": str(Valid),
+                }
+            )
+        forpay = request.POST.get("forpay")
         # if forpay == "ToPayment":
 
     # utilities
     newcupons = Cupons.objects.filter(
-        cupon_user=request.user, cupon_used_status='unused')
+        cupon_user=request.user, cupon_used_status="unused"
+    )
     cart_items = Cart.objects.filter(user=request.user)
-    context = {'NoCartItems': cart_items,
-               'NewCupons': newcupons}
-    return render(request, 'retail/checkout.html', context)  # type: ignore
+    context = {"NoCartItems": cart_items, "NewCupons": newcupons}
+    return render(request, "retail/checkout.html", context)  # type: ignore
 
 
 def cupons(request):
     newcupons = Cupons.objects.filter(
-        cupon_user=request.user, cupon_used_status='unused')
+        cupon_user=request.user, cupon_used_status="unused"
+    )
     usedcupons = Cupons.objects.filter(
-        cupon_user=request.user, cupon_used_status='used')
+        cupon_user=request.user, cupon_used_status="used"
+    )
     cart_items = Cart.objects.filter(user=request.user)
-    context = {'NewCupons': newcupons,
-               'UsedCupons': usedcupons,  'NoCartItems': cart_items}
-    return render(request, 'retail/cupons.html', context)
+    context = {
+        "NewCupons": newcupons,
+        "UsedCupons": usedcupons,
+        "NoCartItems": cart_items,
+    }
+    return render(request, "retail/cupons.html", context)
 
 
 def GenCupons(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         c_user = request.user
         c_id = GenerateIdBig(16)
-        c_name = 'iShop Cupon'
+        c_name = "iShop Cupon"
         c_disc = GenerateDiscount()
         code = str(GenerateCuponId(c_name))
         c_code = code.upper()
         c_disc = GenerateDiscount()
-        Cupons.objects.create(cupon_id=c_id, cupon_name=c_name,
-                              cupon_user=c_user, cupon_discount=c_disc, cupon_code=c_code)
-        return redirect(f'/retail/my-cupons/')
+        Cupons.objects.create(
+            cupon_id=c_id,
+            cupon_name=c_name,
+            cupon_user=c_user,
+            cupon_discount=c_disc,
+            cupon_code=c_code,
+        )
+        return redirect(f"/retail/my-cupons/")
 
-    return render(request, 'needs/404.html')
+    return render(request, "needs/404.html")
 
 
 def TrashCupons(request):
-    return render(request, 'needs/404.html')
+    return render(request, "needs/404.html")
 
 
 def payment(request):
-    return render(request, 'retail/payment.html')
+    return render(request, "retail/payment.html")
 
 
 def ToCheckoutOne(request):
     if request.method == "POST":
-        forWhat = request.POST.get('forwhat')
+        forWhat = request.POST.get("forwhat")
         if forWhat == "ToCheckout":
             productIdentity = request.POST.get("buynow_product_Id")
             productis = AllProducts.objects.get(products_id=productIdentity)
@@ -115,45 +142,46 @@ def ToCheckoutOne(request):
 
             # utilities
             newcupons = Cupons.objects.filter(
-                cupon_user=request.user, cupon_used_status='unused')
+                cupon_user=request.user, cupon_used_status="unused"
+            )
             cart_items = Cart.objects.filter(user=request.user)
-            context = {"productIdentity": productis,
-                       "numberOfProduct": productQuantity, "productSize": productSize, 'NoCartItems': cart_items,
-                       'NewCupons': newcupons}
+            context = {
+                "productIdentity": productis,
+                "numberOfProduct": productQuantity,
+                "productSize": productSize,
+                "NoCartItems": cart_items,
+                "NewCupons": newcupons,
+            }
 
             return render(request, "retail/checkout_one.html", context=context)
     return HttpResponse("This is the ToCheckoutOne view")
 
 
 def Checkout_one(request):
-    if request.method == 'POST':
-        forWhat = request.POST.get('forwhat')
+    if request.method == "POST":
+        forWhat = request.POST.get("forwhat")
         if forWhat == "CuponCode":
-            code = request.POST.get('redeemcode')
-            identity = request.POST.get('CuponId')
-            MaxPrice = request.POST.get('MaxPrice')
-            # getting which cupon is being used
+            code = request.POST.get("redeemcode")
+            identity = request.POST.get("CuponId")
+            MaxPrice = request.POST.get("MaxPrice")
             cuponIS = Cupons.objects.filter(
-                cupon_user=request.user, cupon_code=code, cupon_id=identity)
-            # checking cupon exist or not
+                cupon_user=request.user, cupon_code=code, cupon_id=identity
+            )
             if cuponIS.count() == 0:
                 getTheCupon = None
             else:
                 getTheCupon = cuponIS[0]
-            # Discount Calculations
-            # calculate the discount amount
             if getTheCupon:
                 Cupon_s_Code = getTheCupon.cupon_code
                 Cupon_s_Discount = getTheCupon.cupon_discount
                 Cupon_s_Discount = Decimal(getTheCupon.cupon_discount)
-                MaxPrice = Decimal(request.POST.get('MaxPrice'))
+                MaxPrice = Decimal(request.POST.get("MaxPrice"))
                 amount_left = (Cupon_s_Discount / 100) * MaxPrice
-                discount_amount = amount_left.quantize(Decimal('.01'))
-                payable_price = (
-                    MaxPrice - discount_amount).quantize(Decimal('.01'))
+                discount_amount = amount_left.quantize(Decimal(".01"))
+                payable_price = (MaxPrice - discount_amount).quantize(Decimal(".01"))
                 Valid = "Cupon Valid"
             else:
-                Cupon_s_Code = 'Not a cupon'
+                Cupon_s_Code = "Not a cupon"
                 Cupon_s_Discount = 0
                 MaxPrice = 0
                 amount_left = 00
@@ -167,7 +195,16 @@ def Checkout_one(request):
             usedCupons.save()
 
             # Return the "getTheCupon" value as a JSON response
-            return JsonResponse({'getTheCupon': str(getTheCupon), 'cupon_code': str(Cupon_s_Code), 'cupon_discount': str(Cupon_s_Discount), 'cupon_applied': str(discount_amount), 'youPay': payable_price, 'validity': str(Valid)})
+            return JsonResponse(
+                {
+                    "getTheCupon": str(getTheCupon),
+                    "cupon_code": str(Cupon_s_Code),
+                    "cupon_discount": str(Cupon_s_Discount),
+                    "cupon_applied": str(discount_amount),
+                    "youPay": payable_price,
+                    "validity": str(Valid),
+                }
+            )
 
         if forWhat == "ToPayment":
             productIdentity = request.POST.get("buynow_product_Id")
@@ -239,20 +276,20 @@ def Checkout_one(request):
                 user_order_product_qty=productQuantity,
                 user_order_product_size=productSize,
             )
-            myCustomer = {"customer":MY_Customer, "amountPay":net_payable}
-            return render(request, 'retail/payment_one.html', context=myCustomer)
+            myCustomer = {"customer": MY_Customer, "amountPay": net_payable}
+            return render(request, "retail/payment_one.html", context=myCustomer)
 
     # utilities
     newcupons = Cupons.objects.filter(
-        cupon_user=request.user, cupon_used_status='unused')
+        cupon_user=request.user, cupon_used_status="unused"
+    )
     cart_items = Cart.objects.filter(user=request.user)
-    context = {'NoCartItems': cart_items,
-               'NewCupons': newcupons}
-    return render(request, 'retail/checkout_one.html', context)
+    context = {"NoCartItems": cart_items, "NewCupons": newcupons}
+    return render(request, "retail/checkout_one.html", context)
 
 
 def payment_one(request):
-    return render(request, 'needs/404.html')
+    return render(request, "needs/404.html")
 
 
 def invoice(request):
@@ -278,12 +315,21 @@ def invoice(request):
             Product_ship = request.POST.get("Shipping")
 
             # Generating Bar And QR
-            
+
             #    >QR<
             name = str(str(fname.capitalize()) + " " + str(lname.capitalize()))
             orders = str(Product_quantity)
             location = str(LocationCountry + " (+91)")
-            s = "Customer : " + name + "\nOrders : " + orders + "\nLocation : " + location + "\nProductShippingId : " + shippingID
+            s = (
+                "Customer : "
+                + name
+                + "\nOrders : "
+                + orders
+                + "\nLocation : "
+                + location
+                + "\nProductShippingId : "
+                + shippingID
+            )
             open("#iShopImportant docs/userTemp_QR.txt", "w").write(s)
             isname = str(fname) + str(request.user)
             isnamecontext = "iS" + str(fname) + str(request.user)
@@ -294,33 +340,55 @@ def invoice(request):
 
             # context sending
             fullname = fname + " " + lname
-            address = add1 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address = (
+                add1
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             if add2 is None:
-                add2=add1
+                add2 = add1
             else:
                 add2 = add2
-            address2 = add2 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address2 = (
+                add2
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             # Total amount
             price_in_words = numWordic(Product_Price)
 
             context = {
-                "code" : isnamecontext,
-                "name":fullname, 
-                "address1":address, 
-                "address2":address2,
-                "phone":phone1, 
-                "phone2":phone2,
-                "serviceTax":Product_sT,
-                "ShippingCharge":Product_ship,
-                "total":Product_Price,
-                "total_words":price_in_words,
-                "pmt_method":"VISA",
-                "pmt_status":"Paid",
-                "product_name":Product
+                "code": isnamecontext,
+                "name": fullname,
+                "address1": address,
+                "address2": address2,
+                "phone": phone1,
+                "phone2": phone2,
+                "serviceTax": Product_sT,
+                "ShippingCharge": Product_ship,
+                "total": Product_Price,
+                "total_words": price_in_words,
+                "pmt_method": "VISA",
+                "pmt_status": "Paid",
+                "product_name": Product,
             }
-            return render(request, 'retail/invoice.html', context=context)
+            return render(request, "retail/invoice.html", context=context)
 
         # If Method is Debit Card
         elif methodOfPayment == "DebitCard":
@@ -342,12 +410,21 @@ def invoice(request):
             Product_ship = request.POST.get("Shipping")
 
             # Generating Bar And QR
-            
+
             #    >QR<
             name = str(str(fname.capitalize()) + " " + str(lname.capitalize()))
             orders = str(Product_quantity)
             location = str(LocationCountry + " (+91)")
-            s = "Customer : " + name + "\nOrders : " + orders + "\nLocation : " + location + "\nProductShippingId : " + shippingID
+            s = (
+                "Customer : "
+                + name
+                + "\nOrders : "
+                + orders
+                + "\nLocation : "
+                + location
+                + "\nProductShippingId : "
+                + shippingID
+            )
             open("#iShopImportant docs/userTemp_QR.txt", "w").write(s)
             isname = str(fname) + str(request.user)
             isnamecontext = "iS" + str(fname) + str(request.user)
@@ -358,33 +435,55 @@ def invoice(request):
 
             # context sending
             fullname = fname + " " + lname
-            address = add1 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address = (
+                add1
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             if add2 is None:
-                add2=add1
+                add2 = add1
             else:
                 add2 = add2
-            address2 = add2 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address2 = (
+                add2
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             # Total amount
             price_in_words = numWordic(Product_Price)
 
             context = {
-                "code" : isnamecontext,
-                "name":fullname, 
-                "address1":address, 
-                "address2":address2,
-                "phone":phone1, 
-                "phone2":phone2,
-                "serviceTax":Product_sT,
-                "ShippingCharge":Product_ship,
-                "total":Product_Price,
-                "total_words":price_in_words,
-                "pmt_method":"Debit Card",
-                "pmt_status":"Paid",
-                "product_name":Product
+                "code": isnamecontext,
+                "name": fullname,
+                "address1": address,
+                "address2": address2,
+                "phone": phone1,
+                "phone2": phone2,
+                "serviceTax": Product_sT,
+                "ShippingCharge": Product_ship,
+                "total": Product_Price,
+                "total_words": price_in_words,
+                "pmt_method": "Debit Card",
+                "pmt_status": "Paid",
+                "product_name": Product,
             }
-            return render(request, 'retail/invoice.html', context=context)
+            return render(request, "retail/invoice.html", context=context)
 
         # If Method is Cash on delivery
         elif methodOfPayment == "COD":
@@ -406,48 +505,82 @@ def invoice(request):
             Product_ship = request.POST.get("Shipping")
 
             # Generating Bar And QR
-            
+
             #    >QR<
             name = str(str(fname.capitalize()) + " " + str(lname.capitalize()))
             orders = str(Product_quantity)
             location = str(LocationCountry + " (+91)")
-            s = "Customer : " + name + "\nOrders : " + orders + "\nLocation : " + location + "\nProductShippingId : " + shippingID
-            open("#iShopImportant docs/userTemp_QR.txt", "w").write(s)
+            s = (
+                "Customer : "
+                + name
+                + "\nOrders : "
+                + orders
+                + "\nLocation : "
+                + location
+                + "\nProductShippingId : "
+                + shippingID
+            )
+            open("E:\\Projects\\iShop\\retail\\needs\\qr.txt", "w").write(s)
             isname = str(fname) + str(request.user)
             isnamecontext = "iS" + str(fname) + str(request.user)
-            qr(isname, "#iShopImportant docs/userTemp_QR.txt")
+            qr(isname, "E:\\Projects\\iShop\\retail\\needs\\qr.txt")
 
             #  >BAR<
             bar(shippingID, isname)
             # context sending
             fullname = fname + " " + lname
-            address = add1 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address = (
+                add1
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             if add2 is None:
-                add2=add1
+                add2 = add1
             else:
                 add2 = add2
-            address2 = add2 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address2 = (
+                add2
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             # Total amount
-            price_in_words = numWordic(Product_Price)
+            try:
+                price_in_words = numWordic(Product_Price)
+            except Exception:
+                price_in_words = "Price converting engine failed!"
 
             context = {
-                "code" : isnamecontext,
-                "name":fullname, 
-                "address1":address, 
-                "address2":address2,
-                "phone":phone1, 
-                "phone2":phone2,
-                "serviceTax":Product_sT,
-                "ShippingCharge":Product_ship,
-                "total":Product_Price,
-                "total_words":price_in_words,
-                "pmt_method":"COD",
-                "pmt_status":"Unpaid",
-                "product_name":Product
+                "code": isnamecontext,
+                "name": fullname,
+                "address1": address,
+                "address2": address2,
+                "phone": phone1,
+                "phone2": phone2,
+                "serviceTax": Product_sT,
+                "ShippingCharge": Product_ship,
+                "total": Product_Price,
+                "total_words": price_in_words,
+                "pmt_method": "COD",
+                "pmt_status": "Unpaid",
+                "product_name": Product,
             }
-            return render(request, 'retail/invoice.html', context=context)
+            return render(request, "retail/invoice.html", context=context)
 
         # If Method is Master Card
         elif methodOfPayment == "MasterCard":
@@ -469,12 +602,21 @@ def invoice(request):
             Product_ship = request.POST.get("Shipping")
 
             # Generating Bar And QR
-            
+
             #    >QR<
             name = str(str(fname.capitalize()) + " " + str(lname.capitalize()))
             orders = str(Product_quantity)
             location = str(LocationCountry + " (+91)")
-            s = "Customer : " + name + "\nOrders : " + orders + "\nLocation : " + location + "\nProductShippingId : " + shippingID
+            s = (
+                "Customer : "
+                + name
+                + "\nOrders : "
+                + orders
+                + "\nLocation : "
+                + location
+                + "\nProductShippingId : "
+                + shippingID
+            )
             open("#iShopImportant docs/userTemp_QR.txt", "w").write(s)
             isname = str(fname) + str(request.user)
             isnamecontext = "iS" + str(fname) + str(request.user)
@@ -485,33 +627,55 @@ def invoice(request):
 
             # context sending
             fullname = fname + " " + lname
-            address = add1 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address = (
+                add1
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             if add2 is None:
-                add2=add1
+                add2 = add1
             else:
                 add2 = add2
-            address2 = add2 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address2 = (
+                add2
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             # Total amount
             price_in_words = numWordic(Product_Price)
 
             context = {
-                "code" : isnamecontext,
-                "name":fullname, 
-                "address1":address, 
-                "address2":address2,
-                "phone":phone1, 
-                "phone2":phone2,
-                "serviceTax":Product_sT,
-                "ShippingCharge":Product_ship,
-                "total":Product_Price,
-                "total_words":price_in_words,
-                "pmt_method":"Master Card",
-                "pmt_status":"Paid",
-                "product_name":Product
+                "code": isnamecontext,
+                "name": fullname,
+                "address1": address,
+                "address2": address2,
+                "phone": phone1,
+                "phone2": phone2,
+                "serviceTax": Product_sT,
+                "ShippingCharge": Product_ship,
+                "total": Product_Price,
+                "total_words": price_in_words,
+                "pmt_method": "Master Card",
+                "pmt_status": "Paid",
+                "product_name": Product,
             }
-            return render(request, 'retail/invoice.html', context=context)
+            return render(request, "retail/invoice.html", context=context)
 
         # If Method is PayPal
         elif methodOfPayment == "PayPal":
@@ -533,12 +697,21 @@ def invoice(request):
             Product_ship = request.POST.get("Shipping")
 
             # Generating Bar And QR
-            
+
             #    >QR<
             name = str(str(fname.capitalize()) + " " + str(lname.capitalize()))
             orders = str(Product_quantity)
             location = str(LocationCountry + " (+91)")
-            s = "Customer : " + name + "\nOrders : " + orders + "\nLocation : " + location + "\nProductShippingId : " + shippingID
+            s = (
+                "Customer : "
+                + name
+                + "\nOrders : "
+                + orders
+                + "\nLocation : "
+                + location
+                + "\nProductShippingId : "
+                + shippingID
+            )
             open("#iShopImportant docs/userTemp_QR.txt", "w").write(s)
             isname = str(fname) + str(request.user)
             isnamecontext = "iS" + str(fname) + str(request.user)
@@ -549,33 +722,55 @@ def invoice(request):
 
             # context sending
             fullname = fname + " " + lname
-            address = add1 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address = (
+                add1
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             if add2 is None:
-                add2=add1
+                add2 = add1
             else:
                 add2 = add2
-            address2 = add2 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address2 = (
+                add2
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             # Total amount
             price_in_words = numWordic(Product_Price)
 
             context = {
-                "code" : isnamecontext,
-                "name":fullname, 
-                "address1":address, 
-                "address2":address2,
-                "phone":phone1, 
-                "phone2":phone2,
-                "serviceTax":Product_sT,
-                "ShippingCharge":Product_ship,
-                "total":Product_Price,
-                "total_words":price_in_words,
-                "pmt_method":"PayPal",
-                "pmt_status":"Paid",
-                "product_name":Product
+                "code": isnamecontext,
+                "name": fullname,
+                "address1": address,
+                "address2": address2,
+                "phone": phone1,
+                "phone2": phone2,
+                "serviceTax": Product_sT,
+                "ShippingCharge": Product_ship,
+                "total": Product_Price,
+                "total_words": price_in_words,
+                "pmt_method": "PayPal",
+                "pmt_status": "Paid",
+                "product_name": Product,
             }
-            return render(request, 'retail/invoice.html', context=context)
+            return render(request, "retail/invoice.html", context=context)
 
         # If Method is Credit Card
         elif methodOfPayment == "PayPCreditCardal":
@@ -597,12 +792,21 @@ def invoice(request):
             Product_ship = request.POST.get("Shipping")
 
             # Generating Bar And QR
-            
+
             #    >QR<
             name = str(str(fname.capitalize()) + " " + str(lname.capitalize()))
             orders = str(Product_quantity)
             location = str(LocationCountry + " (+91)")
-            s = "Customer : " + name + "\nOrders : " + orders + "\nLocation : " + location + "\nProductShippingId : " + shippingID
+            s = (
+                "Customer : "
+                + name
+                + "\nOrders : "
+                + orders
+                + "\nLocation : "
+                + location
+                + "\nProductShippingId : "
+                + shippingID
+            )
             open("#iShopImportant docs/userTemp_QR.txt", "w").write(s)
             isname = str(fname) + str(request.user)
             isnamecontext = "iS" + str(fname) + str(request.user)
@@ -613,38 +817,58 @@ def invoice(request):
 
             # context sending
             fullname = fname + " " + lname
-            address = add1 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address = (
+                add1
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             if add2 is None:
-                add2=add1
+                add2 = add1
             else:
                 add2 = add2
-            address2 = add2 + ", " + LocationCity + ", " + LocationState + ", " + LocationCountry + "("+ LocationPin +")"
+            address2 = (
+                add2
+                + ", "
+                + LocationCity
+                + ", "
+                + LocationState
+                + ", "
+                + LocationCountry
+                + "("
+                + LocationPin
+                + ")"
+            )
 
             # Total amount
             price_in_words = numWordic(Product_Price)
 
             context = {
-                "code" : isnamecontext,
-                "name":fullname, 
-                "address1":address, 
-                "address2":address2,
-                "phone":phone1, 
-                "phone2":phone2,
-                "serviceTax":Product_sT,
-                "ShippingCharge":Product_ship,
-                "total":Product_Price,
-                "total_words":price_in_words,
-                "pmt_method":"Credit Card",
-                "pmt_status":"Paid",
-                "product_name":Product
+                "code": isnamecontext,
+                "name": fullname,
+                "address1": address,
+                "address2": address2,
+                "phone": phone1,
+                "phone2": phone2,
+                "serviceTax": Product_sT,
+                "ShippingCharge": Product_ship,
+                "total": Product_Price,
+                "total_words": price_in_words,
+                "pmt_method": "Credit Card",
+                "pmt_status": "Paid",
+                "product_name": Product,
             }
-            return render(request, 'retail/invoice.html', context=context)
+            return render(request, "retail/invoice.html", context=context)
 
         # If Method is Unknown Then Payment Not Accecpted
         else:
-            return render(request, 'needs/403.html')
+            return render(request, "needs/403.html")
 
-
-
-    return render(request, 'needs/404.html')
+    return render(request, "needs/404.html")

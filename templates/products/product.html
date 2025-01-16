@@ -466,9 +466,9 @@
                                     style="height: 30px; width: 30px; transform: translateY(3px);"
                                     thisisthetgtcomment="{{ comment.sno }}">
                                     {% for like in likedComment|get_val:comment.sno %}
-                                    {% if like %}
-                                    {{ like.icon|safe }}
-                                    {% endif %}
+                                        {% if like %}
+                                            {{ like.icon|safe }}
+                                        {% endif %}
                                     {% endfor %}
                                     <i class="bi bi-hand-thumbs-up position-absolute" style="opacity: 0.5;"></i>
                                 </button>

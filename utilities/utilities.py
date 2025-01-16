@@ -2,6 +2,7 @@ import random
 from datetime import datetime, timedelta
 from num2words import num2words as gn
 
+
 def stringify(param):
     """
     Converts the input parameter to its string representation.
@@ -14,6 +15,7 @@ def stringify(param):
     """
     return str(param)
 
+
 def GenerateIdBig(InputLength):
     """
     Generates a random ID consisting of alphanumeric characters and special symbols.
@@ -25,12 +27,13 @@ def GenerateIdBig(InputLength):
         str: The generated ID.
     """
     N = int(InputLength)
-    alpha = '!@$%&?^⨏⨒⨝⫰⫯ɐÆʘʭ⁕⁑⁋⁊'
-    numerics = '1234567890'
-    alphabets = 'apenvituq'
-    res = ''.join(random.choices(alphabets + alpha + numerics, k=N))
-    generatedid = 'iSCC' + res
+    alpha = "!@$%&?^⨏⨒⨝⫰⫯ɐÆʘʭ⁕⁑⁋⁊"
+    numerics = "1234567890"
+    alphabets = "apenvituq"
+    res = "".join(random.choices(alphabets + alpha + numerics, k=N))
+    generatedid = "iSCC" + res
     return generatedid
+
 
 def GenerateCuponId(CuponName):
     """
@@ -43,11 +46,12 @@ def GenerateCuponId(CuponName):
         str: The generated coupon ID.
     """
     N = 6
-    alpha = '!@$%&?^⨏⨒⨝⫰⫯ɐÆʘʭ⁕⁑⁋⁊⩂⩆⩚⩙⩸⩳⩺⪀⩱⩩⪓⫍⫑'
-    numerics = '1234567890'
-    res = ''.join(random.choices(alpha + numerics, k=N))
-    generatedid = CuponName[:1] + 'iSC' + res
+    alpha = "!@$%&?^⨏⨒⨝⫰⫯ɐÆʘʭ⁕⁑⁋⁊⩂⩆⩚⩙⩸⩳⩺⪀⩱⩩⪓⫍⫑"
+    numerics = "1234567890"
+    res = "".join(random.choices(alpha + numerics, k=N))
+    generatedid = CuponName[:1] + "iSC" + res
     return generatedid
+
 
 def GenerateBarId(length):
     """
@@ -60,10 +64,11 @@ def GenerateBarId(length):
         int: The generated Bar Code ID.
     """
     N = int(length)
-    numerics = '1234567890'
-    res = ''.join(random.choices(numerics, k=N))
+    numerics = "1234567890"
+    res = "".join(random.choices(numerics, k=N))
     generatedid = res
     return generatedid
+
 
 def GenerateDiscount():
     """
@@ -77,13 +82,13 @@ def GenerateDiscount():
     return discount
 
 
-
 # Date And Time
 # Get the current date
 current_date = datetime.now().date()
 # Get the current time
 current_time = datetime.now().time()
 formatted_time_24 = current_time.strftime("%H:%M:%S")
+
 
 def CurrentDate():
     """
@@ -116,7 +121,9 @@ def CurrentTime24():
     """
     return formatted_time_24
 
+
 # jump to specific date and time
+
 
 def JumpToDate(days=None, months=None, years=None):
     """
@@ -135,8 +142,7 @@ def JumpToDate(days=None, months=None, years=None):
 
     # Calculate the date difference
     date_difference = timedelta(
-        days=days or 0,
-        weeks=months * 4 if months is not None else 0
+        days=days or 0, weeks=months * 4 if months is not None else 0
     )
 
     # Calculate the new date
@@ -163,16 +169,18 @@ def JumpToTime_12(hours=None, minutes=None, seconds=None, milliseconds=None):
     """
     # Get the current time
     current_time = datetime.now().time()
-    
+
     # Calculate the time difference
     time_difference = timedelta(
         hours=hours or 0,
         minutes=minutes or 0,
         seconds=seconds or 0,
-        milliseconds=milliseconds or 0
+        milliseconds=milliseconds or 0,
     )
     # Calculate the new time
-    new_time = (datetime.combine(datetime.today(), current_time) + time_difference).time()
+    new_time = (
+        datetime.combine(datetime.today(), current_time) + time_difference
+    ).time()
     # Format the new time in 12-hour format
     formatted_time = new_time.strftime("%I:%M:%S %p")
     # Return the result
@@ -200,17 +208,20 @@ def JumpToTime_24(hours=None, minutes=None, seconds=None, milliseconds=None):
         hours=hours or 0,
         minutes=minutes or 0,
         seconds=seconds or 0,
-        milliseconds=milliseconds or 0
+        milliseconds=milliseconds or 0,
     )
     # Calculate the new time
-    new_time = (datetime.combine(datetime.today(), current_time) + time_difference).time()
+    new_time = (
+        datetime.combine(datetime.today(), current_time) + time_difference
+    ).time()
     # Format the new time in 24-hour format
     formatted_time = new_time.strftime("%H:%M:%S")
     # Return the result
     return formatted_time
 
+
 def numWordic(number):
-    '''
+    """
     Generates the numertic form to International Word System
 
     Args:
@@ -218,5 +229,5 @@ def numWordic(number):
 
     Returns:
         str: Number in Words(International format).
-    '''
+    """
     return gn(number=number)
